@@ -50,11 +50,18 @@ The REST APIs are secured with JWT authentication. To access the protected endpo
    - User: `user` / `user123`
 
 2. Authenticate to get a JWT token:
-   ```
-   POST /api/auth/authenticate
+   ```json
+   // POST /api/auth/authenticate
    {
      "username": "admin",
      "password": "admin123"
+   }
+   ```
+
+   Response:
+   ```json
+   {
+     "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMTQ1MjQ5MCwiZXhwIjoxNjMxNDU0MjkwfQ.example_token"
    }
    ```
 
@@ -68,23 +75,182 @@ The REST APIs are secured with JWT authentication. To access the protected endpo
 ### Authentication
 
 - `POST /api/auth/register` - Register a new user
+  ```json
+  // Request Body
+  {
+    "firstName": "New",
+    "lastName": "User",
+    "username": "newuser",
+    "email": "newuser@example.com",
+    "password": "securepassword123",
+    "role": "USER"
+  }
+  ```
+
+  Response:
+  ```json
+  {
+    "message": "User registered successfully"
+  }
+  ```
+
 - `POST /api/auth/authenticate` - Authenticate and get JWT token
+  ```json
+  // Request Body
+  {
+    "username": "admin",
+    "password": "admin123"
+  }
+  ```
+
+  Response:
+  ```json
+  {
+    "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMTQ1MjQ5MCwiZXhwIjoxNjMxNDU0MjkwfQ.example_token"
+  }
+  ```
 
 ### Products
 
 - `GET /api/products` - Get all products
+  
+  Response:
+  ```json
+  [
+    {
+      "id": 1,
+      "name": "Laptop",
+      "description": "High-performance laptop",
+      "price": 1299.99,
+      "stockQuantity": 50
+    },
+    {
+      "id": 2,
+      "name": "Smartphone",
+      "description": "Latest smartphone model",
+      "price": 899.99,
+      "stockQuantity": 100
+    }
+  ]
+  ```
+
 - `GET /api/products/{id}` - Get product by ID
+  
+  Response:
+  ```json
+  {
+    "id": 1,
+    "name": "Laptop",
+    "description": "High-performance laptop",
+    "price": 1299.99,
+    "stockQuantity": 50
+  }
+  ```
+
 - `POST /api/products` - Create a new product
+  ```json
+  // Request Body
+  {
+    "name": "Tablet",
+    "description": "10-inch tablet with high resolution display",
+    "price": 499.99,
+    "stockQuantity": 75
+  }
+  ```
+
 - `PUT /api/products/{id}` - Update a product
+  ```json
+  // Request Body
+  {
+    "name": "Updated Laptop",
+    "description": "Updated high-performance laptop",
+    "price": 1399.99,
+    "stockQuantity": 45
+  }
+  ```
+
 - `DELETE /api/products/{id}` - Delete a product
 
 ### Customers
 
 - `GET /api/customers` - Get all customers
+  
+  Response:
+  ```json
+  [
+    {
+      "id": 1,
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john.doe@example.com",
+      "phone": "123-456-7890",
+      "address": "123 Main St"
+    },
+    {
+      "id": 2,
+      "firstName": "Jane",
+      "lastName": "Smith",
+      "email": "jane.smith@example.com",
+      "phone": "987-654-3210",
+      "address": "456 Oak Ave"
+    }
+  ]
+  ```
+
 - `GET /api/customers/{id}` - Get customer by ID
+  
+  Response:
+  ```json
+  {
+    "id": 1,
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john.doe@example.com",
+    "phone": "123-456-7890",
+    "address": "123 Main St"
+  }
+  ```
+
 - `GET /api/customers/search?lastName=xyz` - Search customers by last name
+  
+  Response:
+  ```json
+  [
+    {
+      "id": 3,
+      "firstName": "Robert",
+      "lastName": "xyz",
+      "email": "robert.xyz@example.com",
+      "phone": "555-123-4567",
+      "address": "789 Pine Rd"
+    }
+  ]
+  ```
+
 - `POST /api/customers` - Create a new customer
+  ```json
+  // Request Body
+  {
+    "firstName": "Alice",
+    "lastName": "Johnson",
+    "email": "alice.johnson@example.com",
+    "phone": "555-987-6543",
+    "address": "321 Elm St"
+  }
+  ```
+
 - `PUT /api/customers/{id}` - Update a customer
+  ```json
+  // Request Body
+  {
+    "firstName": "Alice",
+    "lastName": "Williams",
+    "email": "alice.williams@example.com",
+    "phone": "555-987-6543",
+    "address": "321 Maple Ave"
+  }
+  ```
+
 - `DELETE /api/customers/{id}` - Delete a customer (admin only)
 
 ## SOAP Web Service
@@ -119,3 +285,18 @@ Sample SOAP requests are available in the `src/main/resources/soap-requests` dir
 - Role-based access control
 - Password encryption with BCrypt
 - HTTPS-ready configuration (requires SSL certificate)
+
+### Generating a Secure JWT Key
+
+For security reasons, you should generate a secure JWT key for production use. The application includes a utility class to generate a secure key:
+
+```bash
+# Run the key generator
+mvn compile exec:java -Dexec.mainClass="com.xp.util.JwtKeyGenerator"
+```
+
+This will output a secure key that you can add to your `application.properties` file:
+
+```properties
+jwt.secret=your_generated_secure_key_here
+```

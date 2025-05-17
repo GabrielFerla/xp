@@ -115,14 +115,21 @@ public class JwtService {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-    }
-
-    /**
-     * Get signing key
+    }    /**     * Get signing key
      * @return The signing key
      */
     private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+    
+    /**
+     * Utility method to generate a secure key for JWT
+     * This can be called to generate a secure key for use in application.properties
+     */
+    public static void generateSecureKey() {
+        Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+        String encodedKey = java.util.Base64.getEncoder().encodeToString(key.getEncoded());
+        System.out.println("Secure JWT Key: " + encodedKey);
     }
 }
