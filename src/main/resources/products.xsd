@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+           xmlns:tns="http://www.xp.com/soap/model"
+           targetNamespace="http://www.xp.com/soap/model" 
+           elementFormDefault="qualified">
+
+    <!-- Product Type -->
+    <xs:element name="ProductSoap">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long"/>
+                <xs:element name="name" type="xs:string"/>
+                <xs:element name="description" type="xs:string" minOccurs="0"/>
+                <xs:element name="price" type="xs:double"/>
+                <xs:element name="stock" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Get Product Request -->
+    <xs:element name="GetProductRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Get Product Response -->
+    <xs:element name="GetProductResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:ProductSoap"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Get All Products Request -->
+    <xs:element name="GetAllProductsRequest">
+        <xs:complexType/>
+    </xs:element>
+
+    <!-- Get All Products Response -->
+    <xs:element name="GetAllProductsResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:ProductSoap" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Add Product Request -->
+    <xs:element name="AddProductRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="name" type="xs:string"/>
+                <xs:element name="description" type="xs:string" minOccurs="0"/>
+                <xs:element name="price" type="xs:double"/>
+                <xs:element name="stock" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Add Product Response -->
+    <xs:element name="AddProductResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:ProductSoap"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

@@ -1,0 +1,11 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:mod="http://www.xp.com/soap/model">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <mod:AddProductRequest>
+         <mod:name>SOAP Test Product</mod:name>
+         <mod:description>Product created via SOAP</mod:description>
+         <mod:price>199.99</mod:price>
+         <mod:stock>50</mod:stock>
+      </mod:AddProductRequest>
+   </soapenv:Body>
+</soapenv:Envelope>
