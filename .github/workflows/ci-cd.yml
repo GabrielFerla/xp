@@ -10,12 +10,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     
-    services:
-      h2:
-        image: h2database/h2:latest
-        ports:
-          - 1521:1521
-    
     steps:
     - uses: actions/checkout@v3
     
@@ -30,9 +24,7 @@ jobs:
       with:
         path: ~/.m2
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-        restore-keys: ${{ runner.os }}-m2
-    
-    - name: Run tests
+        restore-keys: ${{ runner.os }}-m2    - name: Run tests
       run: mvn clean test
     
     - name: Generate test report

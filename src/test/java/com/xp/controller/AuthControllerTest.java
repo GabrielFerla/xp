@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -22,7 +23,8 @@ import com.xp.dto.AuthenticationResponse;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class AuthControllerTest {
+@ActiveProfiles("test")
+class AuthControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

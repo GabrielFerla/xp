@@ -1,6 +1,6 @@
 # XP Application
 
-This is a demonstration project for Service-Oriented Architecture and Web Services, implementing both REST and SOAP web services.
+This is a demonstration project for Service-Oriented Architecture and Web Services, implementing both REST and SOAP web services with a complete Enterprise Service Bus (ESB) integration layer.
 
 ## Technologies Used
 
@@ -11,7 +11,42 @@ This is a demonstration project for Service-Oriented Architecture and Web Servic
 - H2 Database
 - SOAP Web Services
 - RESTful APIs
+- **Apache Camel ESB 4.4.0** - Enterprise Service Bus implementation
 - OpenAPI/Swagger Documentation
+- **Resilience4j** - Circuit Breaker pattern implementation
+
+## Enterprise Service Bus (ESB) Features
+
+The application includes a complete ESB implementation using Apache Camel with the following integration patterns:
+
+### Available ESB Endpoints
+
+- **REST to SOAP Bridge**: `/esb/api-to-soap` - Converts REST calls to SOAP
+- **Message Aggregator**: `/esb/aggregate` - Aggregates multiple messages
+- **Content-Based Router**: `/esb/route` - Routes messages based on content
+- **Load Balancer**: `/esb/loadbalance` - Distributes load across endpoints
+- **Circuit Breaker**: `/esb/circuit-breaker` - Implements fault tolerance
+- **Message Enricher**: `/esb/enrich` - Enriches messages with additional data
+- **Dead Letter Channel**: `/esb/deadletter` - Handles failed messages
+
+### ESB Monitoring
+
+- **JMX Management**: Enabled for monitoring and management
+- **Health Endpoints**: Available at `/actuator/health`
+- **Metrics**: Available at `/actuator/metrics`
+
+## Recent Fixes and Improvements
+
+### ESB Circuit Breaker Fix
+- ✅ **Fixed Circuit Breaker**: Added missing `camel-resilience4j-starter` dependency
+- ✅ **Servlet Configuration**: Created `CamelServletConfig` to expose ESB routes via HTTP
+- ✅ **Security Configuration**: Updated to allow access to `/esb/**` endpoints
+
+### CI/CD Pipeline Improvements
+- ✅ **Fixed Docker H2 Issue**: Removed non-existent Docker service from GitHub Actions
+- ✅ **Test Configuration**: Added dedicated `application-test.properties` for test environment
+- ✅ **Maven Surefire**: Configured with Java 21 compatible settings
+- ✅ **Profile Management**: Automated test profile activation
 
 ## Running the Application
 
