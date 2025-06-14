@@ -18,14 +18,14 @@ jobs:
       with:
         java-version: '21'
         distribution: 'temurin'
-    
-    - name: Cache Maven packages
       uses: actions/cache@v3
       with:
         path: ~/.m2
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-        restore-keys: ${{ runner.os }}-m2    - name: Run tests
-      run: mvn clean test
+        restore-keys: ${{ runner.os }}-m2
+    
+    - name: Run tests
+      run: mvn clean test -Dspring.profiles.active=test
     
     - name: Generate test report
       run: mvn surefire-report:report
