@@ -318,31 +318,7 @@ app.audit.enabled=true
 - ✅ **Security Headers**: Complete implementation
 - ✅ **Dependency Scanning**: Automated vulnerability checks
 
-## Security Score Assessment
 
-**Current Security Score**: 85/100
-
-**Scoring Breakdown**:
-- Input Validation: 10/10
-- Authentication: 9/10 (MFA optional)
-- Authorization: 8/10
-- Encryption: 9/10
-- Audit Logging: 10/10
-- Rate Limiting: 9/10
-- Anomaly Detection: 8/10
-- HTTPS/TLS: 10/10
-- Security Headers: 10/10
-- Dependency Management: 7/10
-- LGPD Compliance: 10/10
-
-**Remaining Improvements**:
-- Mandatory MFA for admin users
-- Database encryption at rest
-- Advanced threat detection
-- Security training materials
-- Incident response procedures
-
-## Maintenance and Updates
 
 ### Regular Security Tasks
 
@@ -364,14 +340,4 @@ app.audit.enabled=true
 - Security awareness training
 - Compliance assessment
 
-### Contact Information
-
-**Security Team**: security@xpapp.com
-**Data Protection Officer**: dpo@xpapp.com
-**Emergency Contact**: +55 11 9999-9999
-
 ---
-
-*Last Updated: June 15, 2025*
-*Version: 1.0*
-*Next Review: September 15, 2025*
