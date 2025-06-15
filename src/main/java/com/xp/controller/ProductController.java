@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.xp.dto.ProductDTO;
+import com.xp.security.InputSanitizer;
 import com.xp.service.ProductService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,6 +38,9 @@ public class ProductController {
     @Autowired
     private ProductService productService;
     
+    @Autowired
+    private InputSanitizer inputSanitizer;
+    
     /**
      * Get all products
      * @return List of all products
@@ -45,8 +50,18 @@ public class ProductController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved products",
                     content = @Content(schema = @Schema(implementation = ProductDTO.class)))
-    })
-    public ResponseEntity<List<ProductDTO>> getAllProducts() {
+    })    public ResponseEntity<List<ProductDTO>> getAllProducts(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String id) {
+        
+        // Validate input parameters for security threats
+        if (search != null && inputSanitizer.containsSqlInjectionPattern(search)) {
+            throw new IllegalArgumentException("Invalid search parameter");
+        }
+        if (id != null && inputSanitizer.containsSqlInjectionPattern(id)) {
+            throw new IllegalArgumentException("Invalid id parameter");
+        }
+        
         return ResponseEntity.ok(productService.getAllProducts());
     }
     

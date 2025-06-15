@@ -1,11 +1,11 @@
 package com.xp.controller;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ class AuthControllerTest {
     private ObjectMapper objectMapper;
     
     @Test
-    public void testAuthenticate() throws Exception {
+    void testAuthenticate() throws Exception {
         AuthenticationRequest request = new AuthenticationRequest();
         request.setUsername("admin");
         request.setPassword("admin123");
@@ -53,7 +53,7 @@ class AuthControllerTest {
     
     @Test
     @WithMockUser(username = "user", roles = "USER")
-    public void testGetAllProducts() throws Exception {
+    void testGetAllProducts() throws Exception {
         mockMvc.perform(get("/api/products")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -63,12 +63,50 @@ class AuthControllerTest {
     
     @Test
     @WithMockUser(username = "user", roles = "USER")
-    public void testGetAllCustomers() throws Exception {
+    void testGetAllCustomers() throws Exception {
         mockMvc.perform(get("/api/customers")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").exists())
                 .andExpect(jsonPath("$[0].firstName").exists())
                 .andExpect(jsonPath("$[0].lastName").exists());
+    }
+    
+    @Test
+    void testAuthenticateWithInvalidCredentials() throws Exception {
+        AuthenticationRequest request = new AuthenticationRequest();
+        request.setUsername("invalid");
+        request.setPassword("wrong");
+        
+        mockMvc.perform(post("/api/auth/authenticate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isUnauthorized());
+    }
+    
+    @Test
+    void testRegisterWithValidData() throws Exception {
+        String requestBody = """
+                {
+                    "username": "newuser123",
+                    "password": "password123",
+                    "email": "newuser@example.com"
+                }
+                """;
+          mockMvc.perform(post("/api/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.token").exists());
+    }
+    
+    @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
+    void testSecurityAuditEndpoints() throws Exception {
+        // Test that admin can access restricted endpoints
+        mockMvc.perform(get("/api/customers")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 }

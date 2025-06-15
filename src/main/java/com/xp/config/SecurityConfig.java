@@ -3,6 +3,7 @@ package com.xp.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -44,21 +45,35 @@ public class SecurityConfig {
         return new JwtAuthenticationFilter(jwtService, userDetailsService());
     }    /**
      * Configure security filter chain
-     */
+     */    
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtService jwtService) throws Exception {
-        http
-            .csrf(csrf -> csrf.disable())            .authorizeHttpRequests(auth -> auth
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtService jwtService) throws Exception {        http            .csrf(csrf -> csrf
+                .ignoringRequestMatchers("/api/auth/authenticate", "/api/auth/refresh", "/h2-console/**", "/api/products/**", "/api/customers/**", "/esb/**", "/ws/**", "/api/lgpd/**")
+            )
+            .headers(headers -> headers
+                .frameOptions(frameOptions -> frameOptions.deny())
+                .contentTypeOptions(contentTypeOptions -> {})
+                .httpStrictTransportSecurity(hstsConfig -> hstsConfig
+                    .maxAgeInSeconds(31536000))                .addHeaderWriter((request, response) -> {
+                    response.setHeader("X-XSS-Protection", "1; mode=block");
+                    response.setHeader("X-Content-Type-Options", "nosniff");
+                    response.setHeader("X-Frame-Options", "DENY");
+                }))            .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/api/auth/**").permitAll()
                     .requestMatchers("/ws/**").permitAll()
                     .requestMatchers("/esb/**").permitAll()
                     .requestMatchers("/h2-console/**").permitAll()
                     .requestMatchers("/swagger-ui/**", "/api-docs/**").permitAll()
+                    .requestMatchers("/actuator/health").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
                     .anyRequest().authenticated()
-            ).sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            )            .sessionManagement(sess -> sess
+                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                .sessionConcurrency(sessionConcurrency -> sessionConcurrency
+                    .maximumSessions(1)
+                    .maxSessionsPreventsLogin(false)))
             .authenticationProvider(authenticationProvider())
-            .addFilterBefore(jwtAuthenticationFilter(jwtService), UsernamePasswordAuthenticationFilter.class)
-            .headers(headers -> headers.frameOptions().disable()); // For H2 Console
+            .addFilterBefore(jwtAuthenticationFilter(jwtService), UsernamePasswordAuthenticationFilter.class);
         
         return http.build();
     }

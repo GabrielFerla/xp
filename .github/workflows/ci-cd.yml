@@ -30,12 +30,18 @@ jobs:
     
     - name: Generate test report
       run: mvn surefire-report:report
-    
-    - name: Run SonarQube analysis
+      - name: Run SonarQube analysis
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: mvn sonar:sonar
+    
+    - name: OWASP Dependency Check
+      run: |
+        mvn org.owasp:dependency-check-maven:check
+        
+    - name: SpotBugs Security Analysis
+      run: mvn com.github.spotbugs:spotbugs-maven-plugin:check
     
   build:
     needs: test
@@ -55,11 +61,20 @@ jobs:
     
     - name: Build Docker image
       run: docker build -t xp-application:${{ github.sha }} .
-    
-    - name: Run security scan
+      - name: Run security scan
       run: |
         docker run --rm -v $(pwd):/workspace \
           securecodewarrior/docker-security-scan:latest
+          
+    - name: Trivy vulnerability scanner
+      run: |
+        docker run --rm -v $(pwd):/workspace \
+          aquasec/trivy:latest filesystem /workspace
+          
+    - name: Container security scan with Snyk
+      run: |
+        docker run --rm -v $(pwd):/workspace \
+          snyk/snyk:docker test --docker xp-application:${{ github.sha }}
   
   deploy:
     needs: build
