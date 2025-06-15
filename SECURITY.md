@@ -1,20 +1,20 @@
-# XP Application - Cybersecurity and LGPD Compliance Documentation
+# Aplicativo XP - Documentação de Cibersegurança e Conformidade com a LGPD
 
-## Overview
+## Visão Geral
 
-This document outlines the comprehensive cybersecurity and LGPD compliance implementation for the XP Application. The security framework covers multiple layers including input validation, authentication, authorization, encryption, audit logging, anomaly detection, and data protection.
+Este documento descreve a implementação abrangente de cibersegurança e conformidade com a LGPD para o Aplicativo XP. A estrutura de segurança cobre múltiplas camadas, incluindo validação de entrada, autenticação, autorização, criptografia, registro de auditoria, detecção de anomalias e proteção de dados.
 
-## Security Architecture
+## Arquitetura de Segurança
 
-### 1. Input Sanitization and Validation
+### 1. Saneamento e Validação de Entradas
 
 **Implementation**: `InputSanitizer` class
-- **XSS Protection**: Removes dangerous HTML tags and JavaScript
-- **SQL Injection Prevention**: Validates and sanitizes SQL inputs
-- **Command Injection Protection**: Prevents command execution attacks
-- **Path Traversal Prevention**: Validates file paths
+- **Proteção contra XSS**: Remove tags HTML perigosas e JavaScript
+- **Prevenção de Injeção de SQL**: Valida e sanitiza entradas SQL
+- **Proteção contra Injeção de Comandos**: Prevê ataques de execução de comandos
+- **Prevenção de Traversal de Caminho**: Valida caminhos de arquivos
 
-**Usage**:
+**Uso**:
 ```java
 @Autowired
 private InputSanitizer inputSanitizer;
@@ -22,115 +22,114 @@ private InputSanitizer inputSanitizer;
 String cleanInput = inputSanitizer.sanitizeInput(userInput);
 ```
 
-### 2. Authentication and Authorization
+### 2. Autenticação e Autorização
 
-**Multi-Factor Authentication (MFA)**:
-- TOTP (Time-based One-Time Password) implementation
-- QR code generation for authenticator apps
-- Backup codes for recovery
-- Replay attack prevention
-
-**Features**:
-- 6-digit codes with 30-second time windows
-- Support for multiple authenticator apps
-- Audit logging for all MFA events
-
-### 3. Rate Limiting and Brute Force Protection
-
-**Implementation**: `RateLimitingService`
-- IP-based rate limiting
-- Progressive lockout periods
-- Configurable thresholds
-- Automatic cleanup of old records
-
-**Configuration**:
-- Maximum requests per minute: 60
-- Lockout duration: 15 minutes (first offense)
-- Progressive increases for repeat offenders
-
-### 4. Anomaly Detection
-
-**Implementation**: `AnomalyDetectionService`
-- Real-time monitoring of user activities
-- Detection patterns:
-  - Excessive login attempts
-  - High-frequency data access
-  - Off-hours activities
-  - New location access
-  - Unusual request patterns
-
-**Automated Response**:
-- Security event logging
-- Administrator alerts
-- Automatic account lockout for severe violations
-
-### 5. Data Encryption
-
-**Implementation**: `DataEncryptionService`
-- **Algorithm**: AES-256-GCM (Galois/Counter Mode)
-- **Key Management**: 256-bit encryption keys
-- **IV Generation**: Secure random IV for each encryption
-- **Authenticated Encryption**: Prevents tampering
+**Autenticação Multifator (MFA)**:
+- Implementação de TOTP (Senha Única baseada em Tempo)
+- Geração de QR Code para apps autenticadores
+- Códigos de backup para recuperação
+- Prevenção de ataques de repetição
 
 **Features**:
-- PII data encryption at rest
-- Secure key storage (configurable)
-- Automatic key generation for development
+- Códigos de 6 dígitos com janelas de tempo de 30 segundos
+- Suporte para múltiplos aplicativos autenticadores
+- Registro de auditoria para todos os eventos de MFA
 
-### 6. Security Audit and Logging
+### 3. Limitação de Taxa e Proteção contra Força Bruta
 
-**Implementation**: `SecurityAuditEventListener`
-- Comprehensive security event logging
-- Structured log format for SIEM integration
-- Event categories:
-  - Authentication events
-  - Authorization failures
-  - Data access events
-  - Security violations
-  - Configuration changes
+**Implementação**: `RateLimitingService`
+- Limitação de taxa baseada em IP
+- Períodos de bloqueio progressivos
+- Limiares configuráveis
+- Limpeza automática de registros antigos
 
-**Log Format**:
+**Configuração**:
+- Máximo de requisições por minuto: 60
+- Duração do bloqueio: 15 minutos (primeira infração)
+- Aumentos progressivos para reincidência
+
+### 4. Detecção de Anomalias
+
+**Implementação**: `AnomalyDetectionService`
+- Monitoramento em tempo real de atividades do usuário
+- Padrões de detecção:
+  - Tentativas excessivas de login
+  - Acesso de dados com alta frequência
+  - Atividades fora do horário
+  - Acesso de nova localização
+  - Padrões incomuns de requisição
+
+**Resposta Automatizada**:
+- Registro de eventos de segurança
+- Alertas para administradores
+- Bloqueio automático de contas para violações graves
+
+### 5. Criptografia de Dados
+
+**Implementação**: `DataEncryptionService`
+- **Algoritmo**: AES-256-GCM (Galois/Counter Mode)
+- **Gerenciamento de Chaves**: 256-bit encryption keys
+- **Geração de IV**: Secure random IV for each encryption
+- **Criptografia Autenticada**: Prevents tampering
+
+**Features**:
+- Criptografia de dados pessoais em repouso
+- Armazenamento seguro de chaves (configurável)
+- Geração automática de chaves para desenvolvimento
+
+### 6. Auditoria de Segurança e Registro
+
+**Implementação**: `SecurityAuditEventListener`
+- Registro abrangente de eventos de segurança
+- Formato de log estruturado para integração com SIEM
+- Categorias de eventos:
+  - Eventos de autenticação
+  - Falhas de autorização
+  - Eventos de acesso a dados
+  - Violações de segurança
+  - Alterações de configuração
+
+**Formato de Log**:
 ```
 [SECURITY] EventType: EVENT_NAME | User: username | IP: 192.168.1.1 | Details: description | Timestamp: ISO8601
 ```
 
-### 7. HTTPS/TLS Configuration
+### 7. Configuração HTTPS/TLS
 
-**SSL Configuration**:
-- TLS 1.2+ only
-- Strong cipher suites
+**Configuração SSL**:
+- Apenas TLS 1.2+
+- Conjuntos de cifras fortes
 - HSTS (HTTP Strict Transport Security)
-- Secure cookie flags
+- Flags seguras para cookies
 
-**Security Headers**:
+**Cabeçalhos de Segurança**:
 - `X-Frame-Options: DENY`
 - `X-Content-Type-Options: nosniff`
 - `X-XSS-Protection: 1; mode=block`
 - `Strict-Transport-Security: max-age=31536000; includeSubDomains`
 
-## LGPD Compliance Implementation
+## Implementação de Conformidade com a LGPD
+### 1. Direitos dos Titulares de Dados
 
-### 1. Data Subject Rights
+**Implementação**: `LGPDComplianceService` and `LGPDController`
 
-**Implementation**: `LGPDComplianceService` and `LGPDController`
+**Direitos Suportados**:
+- **Direito de Acesso**: Exportar dados pessoais
+- **Direito de Exclusão**: Excluir dados pessoais
+- **Direito de Portabilidade**: Exportar dados em formato estruturado
+- **Direito de Retificação**: Atualizar dados pessoais
+- **Direito de Oposição**: Optar por não participar do processamento
 
-**Supported Rights**:
-- **Right to Access**: Export personal data
-- **Right to Deletion**: Delete personal data
-- **Right to Portability**: Data export in structured format
-- **Right to Rectification**: Update personal data
-- **Right to Object**: Opt-out of processing
-
-### 2. Data Export
+### 2. Exportação de Dados
 
 **Endpoint**: `POST /api/lgpd/export`
 **Features**:
-- Complete personal data export
-- Structured JSON format
-- Audit trail logging
-- Authentication required
+- Exportação completa de dados pessoais
+- Formato JSON estruturado
+- Registro de trilha de auditoria
+- Autenticação obrigatória
 
-**Response Format**:
+**Formato da Resposta**:
 ```json
 {
   "requestId": "uuid",
@@ -144,90 +143,92 @@ String cleanInput = inputSanitizer.sanitizeInput(userInput);
 }
 ```
 
-### 3. Data Deletion
+### 3. Exclusão de Dados
 
 **Endpoint**: `POST /api/lgpd/delete`
 **Features**:
-- Secure data deletion
-- Cascade deletion of related data
-- Retention of legally required data
-- Confirmation and audit logging
+- Exclusão segura de dados
+- Exclusão em cascata de dados relacionados
+- Retenção de dados exigidos legalmente
+- Confirmação e registro de auditoria
 
-### 4. Consent Management
+### 4. Gerenciamento de Consentimento
 
-**Implementation**: Integrated with user profile management
-- Granular consent tracking
-- Consent withdrawal mechanisms
-- Audit trail of consent changes
-- Regular consent review prompts
+**Implementação**: Integrado ao gerenciamento de perfil do usuário
+- Rastreamento granular de consentimento
+- Mecanismos de retirada de consentimento
+- Trilhas de auditoria de alterações de consentimento
+- Solicitações regulares de revisão de consentimento
 
-## CI/CD Security Pipeline
+## Pipeline de Segurança CI/CD
 
-### 1. Static Analysis Tools
+
+### 1. Ferramentas de Análise Estática
 
 **OWASP Dependency Check**:
-- Vulnerability scanning of dependencies
-- CVE database integration
-- Suppression file for false positives
-- Automated security reports
+- Varredura de vulnerabilidades em dependências
+- Integração com banco de dados CVE
+- Arquivo de supressão para falsos positivos
+- Relatórios de segurança automatizados
 
 **SpotBugs Security**:
-- Static code analysis for security bugs
-- Custom security rules
-- Focus on OWASP Top 10 vulnerabilities
-- Integration with IDE
+- Análise estática de código para falhas de segurança
+- Regras de segurança personalizadas
+- Foco nas vulnerabilidades do OWASP Top 10
+- Integração com IDE
 
-**Configuration Files**:
-- `owasp-suppression.xml`: OWASP suppressions
-- `spotbugs-security-include.xml`: SpotBugs security configuration
+**Arquivos de Configuração**:
+- `owasp-suppression.xml`: Supressões OWASP
+- `spotbugs-security-include.xml`: Configuração de segurança do SpotBugs
 
-### 2. Container Security
+### 2. Segurança de Contêiner
 
 **Trivy Scanner**:
-- Container image vulnerability scanning
-- OS package vulnerability detection
-- Dockerfile security best practices
-- Integration with Docker builds
+- Varredura de vulnerabilidades em imagens de contêiner
+- Detecção de vulnerabilidades em pacotes do SO
+- Boas práticas de segurança para Dockerfile
+- Integração com builds Docker
 
-### 3. Build Security
+### 3. Segurança na Build
 
-**Maven Security Plugins**:
-- Dependency vulnerability checks
-- License compliance verification
-- Code quality gates
-- Security test execution
+**Plugins de Segurança Maven**:
+- Verificação de vulnerabilidades em dependências
+- Verificação de conformidade de licenças
+- Barreiras de qualidade de código
+- Execução de testes de segurança
 
-## Security Monitoring and Maintenance
+  
+## Monitoramento e Manutenção de Segurança
 
-### 1. Scheduled Tasks
+### 1. Tarefas Agendadas
 
-**Implementation**: `SecurityMaintenanceService`
+**Implementação**: `SecurityMaintenanceService`
 
-**Scheduled Operations**:
-- **Daily 2 AM**: Cleanup old anomaly records (30+ days)
-- **Daily Midnight**: Reset rate limiting counters
-- **Weekly Monday 1 AM**: Generate security reports
-- **Hourly**: Validate security service health
+**Operações Agendadas**:
+- **Diariamente às 2h**: Limpeza de registros de anomalias antigos (30+ dias)
+- **Diariamente à meia-noite**: Redefinição de contadores de limitação de taxa
+- **Semanalmente às segundas às 1h**: Geração de relatórios de segurança
+- **De hora em hora**: alidação da integridade dos serviços de segurança
 
-### 2. Health Checks
+### 2. Verificações de Integridade
 
-**Monitored Components**:
-- Anomaly detection service health
-- Rate limiting service status
-- Encryption service availability
-- Database connection security
+**Componentes Monitorados**:
+- Integridade do serviço de detecção de anomalias
+- Status do serviço de limitação de taxa
+- Disponibilidade do serviço de criptografia
+- Segurança da conexão com o banco de dados
 
-### 3. Alerting
+### 3. Alertas
 
-**Alert Conditions**:
-- Multiple failed authentications
-- Anomaly detection triggers
-- Security service failures
-- Suspicious activity patterns
+**Condições de Alerta**:
+- Múltiplas falhas de autenticação
+- Gatilhos de detecção de anomalias
+- Falhas em serviços de segurança
+- Padrões de atividade suspeitos
 
-## Configuration
+## Configuração
 
-### Application Properties
+### Propriedades da Aplicação
 
 ```properties
 # SSL Configuration
@@ -255,89 +256,89 @@ logging.level.security=INFO
 app.audit.enabled=true
 ```
 
-### Environment Variables
+### Variáveis de Ambiente
 
-**Production Environment**:
-- `ENCRYPTION_KEY`: Base64 encoded 256-bit encryption key
-- `DATABASE_URL`: Encrypted database connection string
-- `JWT_SECRET`: Strong JWT signing secret
-- `ADMIN_EMAIL`: Administrator email for security alerts
+**Ambiente de Produção**:
+- `ENCRYPTION_KEY`: Chave de criptografia de 256 bits codificada em Base64
+- `DATABASE_URL`: String de conexão criptografada com o banco de dados
+- `JWT_SECRET`: Segredo forte para assinatura de JWT
+- `ADMIN_EMAIL`: E-mail do administrador para alertas de segurança
 
-## Security Testing
+## Testes de Segurança
 
-### 1. Unit Tests
+### 1. Testes Unitários
 
-**Coverage Areas**:
-- Input sanitization validation
-- Authentication mechanisms
-- Rate limiting functionality
-- Encryption/decryption operations
-- LGPD compliance endpoints
+**Áreas de Cobertura**:
+- Validação de saneamento de entrada
+- Mecanismos de autenticação
+- Funcionalidade de limitação de taxa
+- Operações de criptografia/descriptografia
+- Endpoints de conformidade com a LGPD
 
-### 2. Integration Tests
+### 2. Testes de Integração
 
-**Test Scenarios**:
-- End-to-end security workflows
-- Multi-factor authentication flows
-- LGPD data export/deletion
-- Security header validation
-- SSL/TLS configuration
+**Cenários de Teste**:
+- Fluxos de segurança ponta a ponta
+- Fluxos de autenticação multifator
+- Exportação/exclusão de dados LGPD
+- Validação de cabeçalhos de segurança
+- Configuração SSL/TLS
 
-### 3. Security Tests
+### 3. Testes de Segurança
 
-**Automated Security Testing**:
-- SQL injection prevention
-- XSS protection validation
-- CSRF token verification
-- Authentication bypass attempts
-- Authorization validation
+**Testes de Segurança Automatizados**:
+- Prevenção de injeção de SQL
+- Validação de proteção contra XSS
+- Verificação de tokens CSRF
+- Tentativas de bypass de autenticação
+- Validação de autorização
 
-## Compliance Checklist
+## Checklist de Conformidade
 
-### LGPD Compliance Status
+### Status de Conformidade com a LGPD
 
-- ✅ **Data Subject Rights**: Fully implemented
-- ✅ **Consent Management**: Tracking and withdrawal
-- ✅ **Data Export**: Structured format with audit
-- ✅ **Data Deletion**: Secure deletion with retention rules
-- ✅ **Privacy by Design**: Built into architecture
-- ✅ **Data Protection Officer**: Contact information available
-- ✅ **Breach Notification**: Audit logging and alerting
-- ✅ **Impact Assessments**: Documentation available
+- ✅ **Direitos dos Titulares de Dados**: Totalmente implementado
+- ✅ **Gerenciamento de Consentimento**: Rastreamento e retirada
+- ✅ **Exportação de Dados**: Formato estruturado com auditoria
+- ✅ **Exclusão de Dados**: Exclusão segura com regras de retenção
+- ✅ **Privacidade por Design**: Incorporada à arquitetura
+- ✅ **Encarregado de Proteção de Dados**: Informações de contato disponíveis
+- ✅ **Notificação de Violação**: Registro de auditoria e alertas
+- ✅ **Avaliações de Impacto**: Documentação disponível
 
-### Security Compliance Status
+### Status de Conformidade com Segurança
 
-- ✅ **Input Validation**: Comprehensive sanitization
-- ✅ **Authentication**: Multi-factor support
-- ✅ **Authorization**: Role-based access control
-- ✅ **Encryption**: AES-256-GCM for data at rest
-- ✅ **Audit Logging**: Comprehensive security events
-- ✅ **Rate Limiting**: Brute force protection
-- ✅ **Anomaly Detection**: Real-time monitoring
-- ✅ **Secure Communication**: HTTPS/TLS only
-- ✅ **Security Headers**: Complete implementation
-- ✅ **Dependency Scanning**: Automated vulnerability checks
+- ✅ **Validação de Entrada**: Saneamento abrangente
+- ✅ **Autenticação**: Suporte a multifator
+- ✅ **Autorização**: Controle de acesso baseado em papéis
+- ✅ **Criptografia**: AES-256-GCM para dados em repouso
+- ✅ **Registro de Auditoria**: Eventos de segurança abrangentes
+- ✅ **Limitação de Taxa**: Proteção contra força bruta
+- ✅ **Detecção de Anomalias**: Monitoramento em tempo real
+- ✅ **Comunicação Segura**: Apenas HTTPS/TLS
+- ✅ **Cabeçalhos de Segurança**: Implementação completa
+- ✅ **Verificação de Dependências**: Checagens automatizadas de vulnerabilidades
 
 
 
-### Regular Security Tasks
+### Tarefas Regulares de Segurança
 
-**Monthly**:
-- Review security logs and alerts
-- Update dependency versions
-- Review and update security configurations
-- Conduct security training
+**Mensalmente**:
+- Revisar logs e alertas de segurança
+- Atualizar versões de dependências
+- Revisar e atualizar configurações de segurança
+- Conduzir treinamentos de segurança
 
-**Quarterly**:
-- Security penetration testing
-- Review and update security policies
-- Audit user access permissions
-- Update threat models
+**Trimestralmente**:
+- Testes de penetração de segurança
+- Revisar e atualizar políticas de segurança
+- Auditar permissões de acesso de usuários
+- Atualizar modelos de ameaça
 
-**Annually**:
-- Comprehensive security audit
-- Review and update incident response plans
-- Security awareness training
-- Compliance assessment
+**Anualmente**:
+- Auditoria de segurança abrangente
+- Revisar e atualizar planos de resposta a incidentes
+- Treinamento de conscientização em segurança
+- Avaliação de conformidade
 
 ---
