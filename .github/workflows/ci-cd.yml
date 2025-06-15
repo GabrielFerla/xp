@@ -12,7 +12,8 @@ jobs:
     
     steps:
     - uses: actions/checkout@v3
-      - name: Set up JDK 21
+    
+    - name: Set up JDK 21
       uses: actions/setup-java@v3
       with:
         java-version: '21'
@@ -22,15 +23,15 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ~/.m2
-        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-        restore-keys: ${{ runner.os }}-m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}        restore-keys: ${{ runner.os }}-m2
     
     - name: Run tests
       run: mvn clean test -Dspring.profiles.active=test
     
     - name: Generate test report
       run: mvn surefire-report:report
-      - name: Run SonarQube analysis
+    
+    - name: Run SonarQube analysis
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -53,7 +54,7 @@ jobs:
     - name: Set up JDK 21
       uses: actions/setup-java@v3
       with:
-        java-version: '21'
+        java-version: '21'        
         distribution: 'temurin'
     
     - name: Build application
@@ -61,7 +62,8 @@ jobs:
     
     - name: Build Docker image
       run: docker build -t xp-application:${{ github.sha }} .
-      - name: Run security scan
+    
+    - name: Run security scan
       run: |
         docker run --rm -v $(pwd):/workspace \
           securecodewarrior/docker-security-scan:latest
