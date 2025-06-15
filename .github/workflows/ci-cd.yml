@@ -53,11 +53,6 @@ jobs:
     - name: Build Docker image
       run: docker build -t xp-application:${{ github.sha }} .
     
-    - name: Run security scan
-      run: |
-        docker run --rm -v $(pwd):/workspace \
-          securecodewarrior/docker-security-scan:latest
-          
     - name: Trivy vulnerability scanner
       run: |
         docker run --rm -v $(pwd):/workspace \
