@@ -1,8 +1,8 @@
-# XP Application
+# Aplicação XP
 
-This is a demonstration project for Service-Oriented Architecture and Web Services, implementing both REST and SOAP web services with a complete Enterprise Service Bus (ESB) integration layer.
+Essa é uma demonstração de um projeto para uma arquitetura orientada a serviços, implementando SOAP e REST junto a uma camada de barramento de serviço corporativo (ESB).
 
-## Technologies Used
+## Tecnologias Usadas
 
 - Java 21
 - Spring Boot 3.4.5
@@ -11,61 +11,61 @@ This is a demonstration project for Service-Oriented Architecture and Web Servic
 - H2 Database
 - SOAP Web Services
 - RESTful APIs
-- **Apache Camel ESB 4.4.0** - Enterprise Service Bus implementation
-- OpenAPI/Swagger Documentation
-- **Resilience4j** - Circuit Breaker pattern implementation
+- **Apache Camel ESB 4.4.0** - Barramento de serviço corporativo
+- OpenAPI/Swagger para Documentação
+- **Resilience4j** - Implementa o modelo do Circuit Breaker
 
-## Enterprise Service Bus (ESB) Features
+## Características do ESB
 
-The application includes a complete ESB implementation using Apache Camel with the following integration patterns:
+A aplicação possui implementação completa do ESB usando Apache Camel, através dos seguintes padrões:
 
-### Available ESB Endpoints
+### Endpoints ESB Disponíveis
 
-- **REST to SOAP Bridge**: `/esb/api-to-soap` - Converts REST calls to SOAP
-- **Message Aggregator**: `/esb/aggregate` - Aggregates multiple messages
-- **Content-Based Router**: `/esb/route` - Routes messages based on content
-- **Load Balancer**: `/esb/loadbalance` - Distributes load across endpoints
-- **Circuit Breaker**: `/esb/circuit-breaker` - Implements fault tolerance
-- **Message Enricher**: `/esb/enrich` - Enriches messages with additional data
-- **Dead Letter Channel**: `/esb/deadletter` - Handles failed messages
+- **REST to SOAP Bridge**: `/esb/api-to-soap` - Converte solicitações REST para SOAP
+- **Message Aggregator**: `/esb/aggregate` - Aggrega multiplas mensagens
+- **Content-Based Router**: `/esb/route` - Direciona mensagens baseado no conteúdo
+- **Load Balancer**: `/esb/loadbalance` - Distribui a carga pelos endpoints
+- **Circuit Breaker**: `/esb/circuit-breaker` - Implementa tolerância a falhas
+- **Message Enricher**: `/esb/enrich` - Enriquece as mensagens com informações adicionais
+- **Dead Letter Channel**: `/esb/deadletter` - Cuida de mensagens com erros
 
-### ESB Monitoring
+### Monitoramento do ESB
 
-- **JMX Management**: Enabled for monitoring and management
-- **Health Endpoints**: Available at `/actuator/health`
-- **Metrics**: Available at `/actuator/metrics`
+- **JMX Management**: Para monitoramento e gerenciamento
+- **Health Endpoints**: Disponível em `/actuator/health`
+- **Metrics**: Disponível em `/actuator/metrics`
 
-## Recent Fixes and Improvements
+## Correções Recentes e Aprimoramentos
 
-### ESB Circuit Breaker Fix
-- ✅ **Fixed Circuit Breaker**: Added missing `camel-resilience4j-starter` dependency
-- ✅ **Servlet Configuration**: Created `CamelServletConfig` to expose ESB routes via HTTP
-- ✅ **Security Configuration**: Updated to allow access to `/esb/**` endpoints
+### Correções do ESB Circuit Breaker
+- ✅ **Circuit Breaker Corrigido**: Dependência faltante `camel-resilience4j-starter` adicionada
+- ✅ **Configuração do Servlet**: Arquivo `CamelServletConfig` criado para expor rotas ESB via HTTP
+- ✅ **Configurações de Segurança**: Atualizadas para permitir acesso a pasta `/esb/**` com os endpoints
 
-### CI/CD Pipeline Improvements
-- ✅ **Fixed Docker H2 Issue**: Removed non-existent Docker service from GitHub Actions
-- ✅ **Test Configuration**: Added dedicated `application-test.properties` for test environment
-- ✅ **Maven Surefire**: Configured with Java 21 compatible settings
-- ✅ **Profile Management**: Automated test profile activation
+### Melhorias de CI/CD na Pipeline
+- ✅ **Correção no Docker H2**: Serviço Docker inexistente removido do Github Actions
+- ✅ **Configuração de Testes**: Adicionado o arquivo `application-test.properties` dedicado para testar o ambiente.
+- ✅ **Maven Surefire**: Configurado para compatibilidade com Java 21
+- ✅ **Gerenciamento de Perfis**: Teste de ativação de perfil automático
 
-## Running the Application
+## Carregando a Aplicação
 
-To run the application:
+Para rodar a aplicação, execute o seguinte comando:
 
 ```bash
-# Using Maven Wrapper
+# Usando Maven Wrapper
 ./mvnw spring-boot:run
 ```
 
-Or using regular Maven:
+Ou caso esteja usando o Maven tradicional:
 
 ```bash
 mvn spring-boot:run
 ```
 
-The application will start on port 8080 by default.
+Por padrão, a aplicação começará na porta 8080.
 
-## Accessing the Application
+## Acessando a Applicação
 
 - **H2 Database Console**: http://localhost:8080/h2-console
   - JDBC URL: `jdbc:h2:mem:xpdb`
@@ -74,17 +74,17 @@ The application will start on port 8080 by default.
 
 - **Swagger UI**: http://localhost:8080/swagger-ui.html
 
-- **WSDL for SOAP Web Service**: http://localhost:8080/ws/products.wsdl
+- **WSDL para o serviço web SOAP**: http://localhost:8080/ws/products.wsdl
 
-## API Authentication
+## Autenticação de API
 
-The REST APIs are secured with JWT authentication. To access the protected endpoints, you'll need to:
+As APIs REST estão seguras com Autentiação JWT, para acessar os endpoints protegidos, você terá que:
 
-1. Register a new user or use one of the predefined users:
+1. Registrar um novo usuário ou usar um dos usuários preé-definidos:
    - Admin: `admin` / `admin123`
    - User: `user` / `user123`
 
-2. Authenticate to get a JWT token:
+2. Authenticar para coletar um token JWT:
    ```json
    // POST /api/auth/authenticate
    {
@@ -93,25 +93,25 @@ The REST APIs are secured with JWT authentication. To access the protected endpo
    }
    ```
 
-   Response:
+   Resposta:
    ```json
    {
      "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMTQ1MjQ5MCwiZXhwIjoxNjMxNDU0MjkwfQ.example_token"
    }
    ```
 
-3. Use the returned token in the Authorization header for subsequent requests:
+3. Use a token retornada no header do autenticador para solicitações subsequentes:
    ```
    Authorization: Bearer <token>
    ```
 
-## REST API Endpoints
+##  Endpoints da API REST
 
-### Authentication
+### Authenticação
 
-- `POST /api/auth/register` - Register a new user
+- `POST /api/auth/register` - Registrar um novo usuário
   ```json
-  // Request Body
+  // Corpo
   {
     "firstName": "New",
     "lastName": "User",
@@ -122,14 +122,14 @@ The REST APIs are secured with JWT authentication. To access the protected endpo
   }
   ```
 
-  Response:
+  Resposta:
   ```json
   {
     "message": "User registered successfully"
   }
   ```
 
-- `POST /api/auth/authenticate` - Authenticate and get JWT token
+- `POST /api/auth/authenticate` - Authentique e colete o token JWT
   ```json
   // Request Body
   {
@@ -138,18 +138,18 @@ The REST APIs are secured with JWT authentication. To access the protected endpo
   }
   ```
 
-  Response:
+  Resposta:
   ```json
   {
     "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMTQ1MjQ5MCwiZXhwIjoxNjMxNDU0MjkwfQ.example_token"
   }
   ```
 
-### Products
+### Produtos
 
-- `GET /api/products` - Get all products
+- `GET /api/products` - Coleta todos os produtos
   
-  Response:
+  Resposta:
   ```json
   [
     {
@@ -169,9 +169,9 @@ The REST APIs are secured with JWT authentication. To access the protected endpo
   ]
   ```
 
-- `GET /api/products/{id}` - Get product by ID
+- `GET /api/products/{id}` - Pega um produto por ID
   
-  Response:
+  Resposta:
   ```json
   {
     "id": 1,
@@ -182,9 +182,9 @@ The REST APIs are secured with JWT authentication. To access the protected endpo
   }
   ```
 
-- `POST /api/products` - Create a new product
+- `POST /api/products` - Cria um novo produto
   ```json
-  // Request Body
+  // Corpo
   {
     "name": "Tablet",
     "description": "10-inch tablet with high resolution display",
@@ -193,9 +193,9 @@ The REST APIs are secured with JWT authentication. To access the protected endpo
   }
   ```
 
-- `PUT /api/products/{id}` - Update a product
+- `PUT /api/products/{id}` - Atualiza um produto
   ```json
-  // Request Body
+  // Corpo
   {
     "name": "Updated Laptop",
     "description": "Updated high-performance laptop",
@@ -204,13 +204,13 @@ The REST APIs are secured with JWT authentication. To access the protected endpo
   }
   ```
 
-- `DELETE /api/products/{id}` - Delete a product
+- `DELETE /api/products/{id}` - Deleta um produto
 
-### Customers
+### Clientes
 
-- `GET /api/customers` - Get all customers
+- `GET /api/customers` - Coleta todos os clientes
   
-  Response:
+  Resposta:
   ```json
   [
     {
@@ -232,9 +232,9 @@ The REST APIs are secured with JWT authentication. To access the protected endpo
   ]
   ```
 
-- `GET /api/customers/{id}` - Get customer by ID
+- `GET /api/customers/{id}` - Coleta clientes por ID
   
-  Response:
+  Resposta:
   ```json
   {
     "id": 1,
@@ -246,9 +246,9 @@ The REST APIs are secured with JWT authentication. To access the protected endpo
   }
   ```
 
-- `GET /api/customers/search?lastName=xyz` - Search customers by last name
+- `GET /api/customers/search?lastName=xyz` - Pesquisa clientes pelo último nome
   
-  Response:
+  Resposta:
   ```json
   [
     {
@@ -262,9 +262,9 @@ The REST APIs are secured with JWT authentication. To access the protected endpo
   ]
   ```
 
-- `POST /api/customers` - Create a new customer
+- `POST /api/customers` - Cria um novo cliente
   ```json
-  // Request Body
+  // Corpo
   {
     "firstName": "Alice",
     "lastName": "Johnson",
@@ -274,9 +274,9 @@ The REST APIs are secured with JWT authentication. To access the protected endpo
   }
   ```
 
-- `PUT /api/customers/{id}` - Update a customer
+- `PUT /api/customers/{id}` - Atualiza um cliente
   ```json
-  // Request Body
+  // Corpo
   {
     "firstName": "Alice",
     "lastName": "Williams",
@@ -286,52 +286,52 @@ The REST APIs are secured with JWT authentication. To access the protected endpo
   }
   ```
 
-- `DELETE /api/customers/{id}` - Delete a customer (admin only)
+- `DELETE /api/customers/{id}` - Deleta um cliente (somente admin)
 
 ## SOAP Web Service
 
-The application exposes a SOAP web service for products. You can access the WSDL at http://localhost:8080/ws/products.wsdl.
+A aplicação expõe o SOAP Web Service para os produtos. Você pode acessar o WSDL em http://localhost:8080/ws/products.wsdl.
 
-Sample SOAP requests are available in the `src/main/resources/soap-requests` directory.
+Exemplos de solicitações SOAP estão disponíveis na pasta `src/main/resources/soap-requests`
 
-### Testing with SoapUI or Postman
+### Testando com o SoapUI ou Postman
 
-1. Import the WSDL into SoapUI or Postman
-2. Use the sample requests provided in the `soap-requests` directory
+1. Importe o WSDL no SoapUI ou Postman
+2. Use as solicitações de exemplo disponíveis na pasta `soap-requests`
 
-### Available SOAP Operations
+### Operações SOAP Disponíveis
 
-- `GetAllProductsRequest` - Get all products
-- `GetProductRequest` - Get product by ID
-- `AddProductRequest` - Add a new product
+- `GetAllProductsRequest` - Coleta todos os produtos
+- `GetProductRequest` - Pega um produto por ID
+- `AddProductRequest` - Adiciona um novo produto
 
-## Architectural Patterns Demonstrated
+## adrões Architecturais Demonstrados
 
-- **Service-Oriented Architecture (SOA)**: Through REST and SOAP Web Services
-- **Modularization**: Using interfaces and implementations
-- **Factory Pattern**: See `ProductFactory` and `CustomerFactory`
-- **DTO Pattern**: Data Transfer Objects for API communication
-- **Repository Pattern**: For data access abstraction
-- **MVC Pattern**: Model-View-Controller pattern for web APIs
+- **Arquitetura Orientada a Serviços (SOA)**: Por APIs REST e SOAP Web Services
+- **Modularização**: Usando interfaces e implementações
+- **Factory**: Em `ProductFactory` e `CustomerFactory`
+- **DTO**: Objetos para transferência de dados para comunicação de APIs.
+- **Repositório**: Para abstração de acesso a dados.
+- **Padrão MVC**: Model-View-Controller para APIs Web.
 
-## Security Features
+## Segurança
 
-- JWT-based authentication and authorization
-- Role-based access control
-- Password encryption with BCrypt
-- HTTPS-ready configuration (requires SSL certificate)
+- Autenticação e autorização baseados em JWT.
+- Controle de acesso baseado em função.
+- Criptografia de senhas usando BCrypt
+- Configuração HTTPS-ready (certificado SSL é necessário)
 
-### Generating a Secure JWT Key
+### Gerando uma chave JWT segura
 
-For security reasons, you should generate a secure JWT key for production use. The application includes a utility class to generate a secure key:
+Por motivos de segurança, você deve gerar a chave JWT somente para uso em produção. A aplicação inclui uma classe utilitária que gera a chave através do seguinte comando:
 
 ```bash
-# Run the key generator
+# Roda o gerador de chaves
 mvn compile exec:java -Dexec.mainClass="com.xp.util.JwtKeyGenerator"
 ```
 
-This will output a secure key that you can add to your `application.properties` file:
+Isso irá resultar numa chave segura a qual você pode adicionar no arquivo `application.properties`, da seguinte forma:
 
 ```properties
-jwt.secret=your_generated_secure_key_here
+jwt.secret=sua_chave_segura_aqui
 ```
