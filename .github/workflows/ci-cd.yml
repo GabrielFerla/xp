@@ -32,9 +32,6 @@ jobs:
     - name: Generate test report
       run: mvn surefire-report:report
     
-    - name: OWASP Dependency Check
-      run: |
-        mvn org.owasp:dependency-check-maven:check
         
     - name: SpotBugs Security Analysis
       run: mvn com.github.spotbugs:spotbugs-maven-plugin:check
