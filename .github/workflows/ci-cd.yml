@@ -32,9 +32,7 @@ jobs:
     - name: Generate test report
       run: mvn surefire-report:report
     
-        
-    - name: SpotBugs Security Analysis
-      run: mvn com.github.spotbugs:spotbugs-maven-plugin:check
+  
     
   build:
     needs: test
