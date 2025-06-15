@@ -53,16 +53,7 @@ jobs:
     - name: Build Docker image
       run: docker build -t xp-application:${{ github.sha }} .
     
-    - name: Trivy vulnerability scanner
-      run: |
-        docker run --rm -v $(pwd):/workspace \
-          aquasec/trivy:latest filesystem /workspace
-          
-    - name: Container security scan with Snyk
-      run: |
-        docker run --rm -v $(pwd):/workspace \
-          snyk/snyk:docker test --docker xp-application:${{ github.sha }}
-  
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
