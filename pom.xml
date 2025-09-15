@@ -63,7 +63,6 @@
 		<dependency>
 			<groupId>wsdl4j</groupId>
 			<artifactId>wsdl4j</artifactId>
-			<version>${wsdl4j.version}</version>
 		</dependency>
 		
 		<!-- H2 Database -->
@@ -196,10 +195,6 @@
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.flywaydb</groupId>
-			<artifactId>flyway-database-h2</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.flywaydb</groupId>
