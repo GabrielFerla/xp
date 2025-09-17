@@ -100,6 +100,36 @@ jobs:
           echo "4. Executar OWASP Dependency Check localmente com conexão estável" >> sast-report.md
         fi
     
+    - name: Display SAST Summary
+      run: |
+        echo "=========================================="
+        echo "📊 RESUMO DA ANÁLISE SAST"
+        echo "=========================================="
+        echo ""
+        if [ -f "target/dependency-check-report.html" ]; then
+          echo "✅ OWASP Dependency Check: SUCESSO"
+          echo "   📄 Relatório: target/dependency-check-report.html"
+        else
+          echo "⚠️ OWASP Dependency Check: FALHOU (problemas de conectividade)"
+        fi
+        echo ""
+        if [ -f "target/spotbugsXml.xml" ]; then
+          echo "✅ SpotBugs Security Analysis: SUCESSO"
+          echo "   📄 Relatório: target/spotbugsXml.xml"
+          # Contar bugs encontrados
+          BUG_COUNT=$(grep -c "<BugInstance" target/spotbugsXml.xml 2>/dev/null || echo "0")
+          echo "   🐛 Total de bugs encontrados: $BUG_COUNT"
+        else
+          echo "❌ SpotBugs Security Analysis: FALHOU"
+        fi
+        echo ""
+        if [ -f "sast-report.md" ]; then
+          echo "✅ Relatório Consolidado: sast-report.md"
+        fi
+        echo ""
+        echo "📦 Todos os relatórios foram salvos como artefatos"
+        echo "=========================================="
+    
     - name: Upload SAST Reports
       uses: actions/upload-artifact@v4
       with:

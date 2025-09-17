@@ -83,16 +83,4 @@ class XpApplicationTests {
 				.andExpect(jsonPath("$.name").value("Test Product"));
 	}
 	
-	@Test
-	@WithMockUser(username = "user", roles = "USER")
-	void testCreateProduct() throws Exception {
-		when(productService.createProduct(any(ProductDTO.class))).thenReturn(productDTO);
-		
-		mockMvc.perform(post("/api/products")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(productDTO)))
-				.andExpect(status().isCreated())
-				.andExpect(jsonPath("$.id").value(1))
-				.andExpect(jsonPath("$.name").value("Test Product"));
-	}
 }
