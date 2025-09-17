@@ -1,0 +1,135 @@
+version: '3.8'
+
+services:
+  # Aplicação XP para testes DAST
+  xp-app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=test
+      - SERVER_PORT=8080
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - dast-network
+
+  # Dastardly (Burp Suite) para varredura rápida
+  dastardly:
+    image: public.ecr.aws/portswigger/dastardly:latest
+    volumes:
+      - ./dastardly-reports:/dastardly/reports
+    networks:
+      - dast-network
+    depends_on:
+      - xp-app
+    command: >
+      sh -c "
+        echo 'Aguardando aplicação XP estar pronta...' &&
+        sleep 60 &&
+        echo 'Executando Dastardly (Burp Suite)...' &&
+        dastardly --url http://xp-app:8080 
+        --report-file /dastardly/reports/dastardly-report.json 
+        --report-format json
+      "
+
+  # OWASP ZAP para análise complementar
+  zap:
+    image: owasp/zap2docker-stable
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./zap-reports:/zap/wrk
+    environment:
+      - ZAP_PORT=8080
+    networks:
+      - dast-network
+    depends_on:
+      - xp-app
+    command: zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.disablekey=true
+
+  # Nikto para varredura de vulnerabilidades web
+  nikto:
+    image: sullo/nikto
+    volumes:
+      - ./nikto-reports:/tmp/reports
+    networks:
+      - dast-network
+    depends_on:
+      - xp-app
+    command: >
+      sh -c "
+        echo 'Aguardando aplicação XP estar pronta...' &&
+        sleep 60 &&
+        echo 'Executando Nikto...' &&
+        nikto -h http://xp-app:8080 
+        -output /tmp/reports/nikto-report.html 
+        -Format htm 
+        -Tuning 1,2,3,4,5,6,7,8,9,0,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z
+      "
+
+  # SQLMap para testes de SQL Injection
+  sqlmap:
+    image: paoloo/sqlmap
+    volumes:
+      - ./sqlmap-reports:/tmp/reports
+    networks:
+      - dast-network
+    depends_on:
+      - xp-app
+    command: >
+      sh -c "
+        echo 'Aguardando aplicação XP estar pronta...' &&
+        sleep 60 &&
+        echo 'Executando SQLMap...' &&
+        sqlmap -u 'http://xp-app:8080/api/auth/authenticate' 
+        --data 'username=admin&password=admin' 
+        --batch 
+        --output-dir=/tmp/reports
+      "
+
+  # Wapiti para testes de vulnerabilidades web
+  wapiti:
+    image: wapiti-scanner/wapiti
+    volumes:
+      - ./wapiti-reports:/tmp/reports
+    networks:
+      - dast-network
+    depends_on:
+      - xp-app
+    command: >
+      sh -c "
+        echo 'Aguardando aplicação XP estar pronta...' &&
+        sleep 60 &&
+        echo 'Executando Wapiti...' &&
+        wapiti -u http://xp-app:8080 
+        --output /tmp/reports/wapiti-report.html 
+        --format html
+      "
+
+  # Nginx para proxy reverso (opcional)
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx-dast.conf:/etc/nginx/nginx.conf
+    networks:
+      - dast-network
+    depends_on:
+      - xp-app
+
+networks:
+  dast-network:
+    driver: bridge
+
+volumes:
+  dastardly-reports:
+  zap-reports:
+  nikto-reports:
+  sqlmap-reports:
+  wapiti-reports:

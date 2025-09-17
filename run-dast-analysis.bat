@@ -2,6 +2,11 @@
 echo ========================================
 echo Executando Análise DAST (Dynamic Application Security Testing)
 echo ========================================
+echo.
+echo ℹ️  NOTA: Para uma análise mais eficiente, considere usar:
+echo    - run-dast-burp.bat (com Burp Suite Dastardly)
+echo    - run-burp-docker.bat (ambiente completo via Docker)
+echo ========================================
 
 echo.
 echo [1/6] Verificando dependências...
@@ -36,13 +41,13 @@ timeout /t 90 /nobreak >nul
 
 echo.
 echo [3/6] Verificando se aplicação está rodando...
-for /L %%i in (1,1,30) do (
-    curl -f http://localhost:8080/actuator/health >nul 2>&1
+for /L %%i in (1,1,5) do (
+    curl -f http://localhost:8082/actuator/health >nul 2>&1
     if !ERRORLEVEL! equ 0 (
         echo ✅ Aplicação está rodando e pronta para testes
         goto :app_ready
     )
-    echo Aguardando aplicação... tentativa %%i/30
+    echo Aguardando aplicação... tentativa %%i/5
     timeout /t 10 /nobreak >nul
 )
 
@@ -56,7 +61,7 @@ echo.
 echo [4/6] Executando OWASP ZAP Baseline Scan...
 echo Baixando e executando OWASP ZAP...
 docker run -t --rm -v "%cd%":/zap/wrk/:rw owasp/zap2docker-stable zap-baseline.py ^
-  -t http://host.docker.internal:8080 ^
+  -t http://host.docker.internal:8082 ^
   -J zap-baseline-report.json ^
   -x zap-baseline-report.xml ^
   -r zap-baseline-report.html ^
@@ -72,7 +77,7 @@ echo.
 echo [5/6] Executando Nikto Web Vulnerability Scanner...
 echo Executando Nikto...
 docker run --rm -v "%cd%":/tmp/reports ^
-  sullo/nikto -h http://host.docker.internal:8080 ^
+  sullo/nikto -h http://host.docker.internal:8082 ^
   -output /tmp/reports/nikto-report.html ^
   -Format htm ^
   -Tuning 1,2,3,4,5,6,7,8,9,0,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z
@@ -84,7 +89,7 @@ if %ERRORLEVEL% neq 0 (
 echo.
 echo [6/6] Executando testes de segurança customizados...
 echo Executando script Python de testes customizados...
-python scripts/security-tests.py http://localhost:8080
+python scripts/security-tests.py http://localhost:8082
 
 if %ERRORLEVEL% neq 0 (
     echo ⚠️ AVISO: Testes customizados encontraram vulnerabilidades
