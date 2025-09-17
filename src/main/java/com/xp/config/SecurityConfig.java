@@ -1,6 +1,5 @@
 package com.xp.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -33,7 +32,6 @@ public class SecurityConfig {
 
     private final UserRepository userRepository;
     
-    @Autowired
     public SecurityConfig(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -51,21 +49,20 @@ public class SecurityConfig {
                 .ignoringRequestMatchers("/api/auth/authenticate", "/api/auth/refresh", "/h2-console/**", "/api/products/**", "/api/customers/**", "/esb/**", "/ws/**", "/api/lgpd/**")
             )
             .headers(headers -> headers
-                .frameOptions(frameOptions -> frameOptions.deny())
+                .frameOptions(frameOptions -> frameOptions.sameOrigin())
                 .contentTypeOptions(contentTypeOptions -> {})
-                .httpStrictTransportSecurity(hstsConfig -> hstsConfig
-                    .maxAgeInSeconds(31536000))                .addHeaderWriter((request, response) -> {
+                .addHeaderWriter((request, response) -> {
                     response.setHeader("X-XSS-Protection", "1; mode=block");
                     response.setHeader("X-Content-Type-Options", "nosniff");
-                    response.setHeader("X-Frame-Options", "DENY");
                 }))            .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/api/auth/**").permitAll()
                     .requestMatchers("/ws/**").permitAll()
                     .requestMatchers("/esb/**").permitAll()
                     .requestMatchers("/h2-console/**").permitAll()
-                    .requestMatchers("/swagger-ui/**", "/api-docs/**").permitAll()
-                    .requestMatchers("/actuator/health").permitAll()
+                    .requestMatchers("/swagger-ui/**", "/api-docs/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
+                    .requestMatchers("/actuator/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
+                    .requestMatchers("/error").permitAll()
                     .anyRequest().authenticated()
             )            .sessionManagement(sess -> sess
                 .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
