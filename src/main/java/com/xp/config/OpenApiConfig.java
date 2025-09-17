@@ -23,7 +23,7 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("XP Application API")
                         .description("XP Application REST API and SOAP Web Service Documentation")
-                        .version("v1.0.0")
+                        .version("1.0.0")
                         .contact(new Contact()
                                 .name("XP Team")
                                 .email("contact@xp.com")

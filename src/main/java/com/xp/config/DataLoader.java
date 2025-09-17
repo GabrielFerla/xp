@@ -3,6 +3,7 @@ package com.xp.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 import com.xp.model.Customer;
 import com.xp.model.Product;
@@ -17,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Initial Data Loader
  */
-// @Component - Temporarily disabled for MySQL testing
+@Component
 @Slf4j
 public class DataLoader implements CommandLineRunner {
 
