@@ -6,10 +6,10 @@ services:
     container_name: xp-mysql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_ROOT_PASSWORD: 123qwe
       MYSQL_DATABASE: xpdb
-      MYSQL_USER: xp_user
-      MYSQL_PASSWORD: xp_password
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 123qwe
     ports:
       - "3306:3306"
     volumes:
