@@ -5394,3 +5394,137 @@ java.lang.IllegalArgumentException: Invalid character found in method name [0x16
 2025-09-16 21:51:31 [http-nio-8080-exec-9] DEBUG o.s.s.w.s.ForceEagerSessionCreationFilter - Created session eagerly
 2025-09-16 21:51:31 [http-nio-8080-exec-9] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
 2025-09-16 21:51:31 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /v3/api-docs
+2025-09-16 21:51:40 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /swagger-ui.html
+2025-09-16 21:51:40 [http-nio-8080-exec-3] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2025-09-16 21:51:40 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /swagger-ui.html
+2025-09-16 21:51:40 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /swagger-ui/index.html
+2025-09-16 21:51:40 [http-nio-8080-exec-1] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2025-09-16 21:51:40 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /swagger-ui/index.html
+2025-09-16 21:51:40 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /swagger-ui/swagger-ui.css
+2025-09-16 21:51:40 [http-nio-8080-exec-2] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2025-09-16 21:51:40 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /swagger-ui/swagger-ui.css
+2025-09-16 21:51:40 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /swagger-ui/index.css
+2025-09-16 21:51:40 [http-nio-8080-exec-4] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2025-09-16 21:51:40 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /swagger-ui/swagger-ui-bundle.js
+2025-09-16 21:51:40 [http-nio-8080-exec-10] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2025-09-16 21:51:40 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /swagger-ui/index.css
+2025-09-16 21:51:40 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /swagger-ui/swagger-ui-bundle.js
+2025-09-16 21:51:40 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /swagger-ui/swagger-ui-standalone-preset.js
+2025-09-16 21:51:40 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /swagger-ui/swagger-initializer.js
+2025-09-16 21:51:40 [http-nio-8080-exec-5] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2025-09-16 21:51:40 [http-nio-8080-exec-6] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2025-09-16 21:51:40 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /swagger-ui/swagger-initializer.js
+2025-09-16 21:51:40 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /swagger-ui/swagger-ui-standalone-preset.js
+2025-09-16 21:51:40 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /v3/api-docs/swagger-config
+2025-09-16 21:51:40 [http-nio-8080-exec-7] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2025-09-16 21:51:40 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /v3/api-docs/swagger-config
+2025-09-16 21:51:40 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /v3/api-docs
+2025-09-16 21:51:40 [http-nio-8080-exec-8] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2025-09-16 21:51:40 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /v3/api-docs
+2025-09-16 21:52:55 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-09-16 21:52:55 [Thread-5] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-16 21:52:55 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-09-16 21:52:55 [Thread-5] INFO  o.a.c.i.engine.AbstractCamelContext - Apache Camel 4.4.0 (XP-ESB) is shutting down (timeout:45s)
+2025-09-16 21:52:55 [Thread-5] INFO  o.a.c.i.engine.AbstractCamelContext - Routes stopped (stopped:11)
+2025-09-16 21:52:55 [Thread-5] INFO  o.a.c.i.engine.AbstractCamelContext -     Stopped dead-letter-queue (direct://deadLetterQueue)
+2025-09-16 21:52:55 [Thread-5] INFO  o.a.c.i.engine.AbstractCamelContext -     Stopped dead-letter-channel (servlet:/deadletter)
+2025-09-16 21:52:55 [Thread-5] INFO  o.a.c.i.engine.AbstractCamelContext -     Stopped message-enricher (servlet:/enrich)
+2025-09-16 21:52:55 [Thread-5] INFO  o.a.c.i.engine.AbstractCamelContext -     Stopped circuit-breaker (servlet:/circuit-breaker)
+2025-09-16 21:52:55 [Thread-5] INFO  o.a.c.i.engine.AbstractCamelContext -     Stopped load-balancer (servlet:/loadbalance)
+2025-09-16 21:52:55 [Thread-5] INFO  o.a.c.i.engine.AbstractCamelContext -     Stopped content-based-router (servlet:/route)
+2025-09-16 21:52:55 [Thread-5] INFO  o.a.c.i.engine.AbstractCamelContext -     Stopped message-aggregator (servlet:/aggregate)
+2025-09-16 21:52:55 [Thread-5] INFO  o.a.c.i.engine.AbstractCamelContext -     Stopped soap-to-json-transformer (direct://transformSoapToJson)
+2025-09-16 21:52:55 [Thread-5] INFO  o.a.c.i.engine.AbstractCamelContext -     Stopped get-product-by-id-soap (direct://getProductByIdSOAP)
+2025-09-16 21:52:55 [Thread-5] INFO  o.a.c.i.engine.AbstractCamelContext -     Stopped get-all-products-soap (direct://getAllProductsSOAP)
+2025-09-16 21:52:55 [Thread-5] INFO  o.a.c.i.engine.AbstractCamelContext -     Stopped rest-to-soap-bridge (servlet:/api-to-soap)
+2025-09-16 21:52:55 [Thread-5] INFO  o.a.c.i.engine.AbstractCamelContext - Apache Camel 4.4.0 (XP-ESB) shutdown in 19ms (uptime:2m0s)
+2025-09-16 21:52:55 [Thread-5] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-09-16 21:52:55 [Thread-5] WARN  o.s.b.f.s.DisposableBeanAdapter - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-232]
+2025-09-16 21:52:55 [Thread-5] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-09-16 21:52:55 [Thread-5] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-09-16 21:52:55 [Thread-5] INFO  o.a.c.c.s.CamelHttpTransportServlet - Destroyed CamelHttpTransportServlet[CamelServlet]
+2025-09-16 21:52:56 [restartedMain] INFO  com.xp.XpApplication - Starting XpApplication using Java 21.0.6 with PID 257948 (C:\Aulas\xp\target\classes started by gabri in C:\Aulas\xp)
+2025-09-16 21:52:56 [restartedMain] INFO  com.xp.XpApplication - No active profile set, falling back to 1 default profile: "default"
+2025-09-16 21:52:56 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-09-16 21:52:56 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 21 ms. Found 3 JPA repository interfaces.
+2025-09-16 21:52:56 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-16 21:52:56 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-16 21:52:56 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.40]
+2025-09-16 21:52:56 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-09-16 21:52:56 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 872 ms
+2025-09-16 21:52:57 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-09-16 21:52:57 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-09-16 21:52:57 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-09-16 21:52:57 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Starting...
+2025-09-16 21:52:57 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-2 - Added connection conn10: url=jdbc:h2:mem:xpdb user=SA
+2025-09-16 21:52:57 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Start completed.
+2025-09-16 21:52:57 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-09-16 21:52:57 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-2)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-09-16 21:52:57 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-09-16 21:52:57 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-09-16 21:52:57 [restartedMain] DEBUG c.x.security.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+2025-09-16 21:52:57 [restartedMain] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2025-09-16 21:52:57 [restartedMain] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2025-09-16 21:52:57 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-09-16 21:52:58 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 3 endpoints beneath base path '/actuator'
+2025-09-16 21:52:58 [restartedMain] DEBUG o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, ForceEagerSessionCreationFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CsrfFilter, LogoutFilter, JwtAuthenticationFilter, ConcurrentSessionFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2025-09-16 21:52:58 [restartedMain] INFO  o.s.w.s.a.s.AnnotationActionEndpointMapping - Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2025-09-16 21:52:58 [restartedMain] INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:xpdb'
+2025-09-16 21:52:58 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-09-16 21:52:58 [restartedMain] INFO  o.a.c.c.s.CamelHttpTransportServlet - Initialized CamelHttpTransportServlet[name=CamelServlet, contextPath=]
+2025-09-16 21:52:58 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-09-16 21:52:58 [scheduling-1] DEBUG c.x.security.AnomalyDetectionService - Anomaly detection service health check: 0 user records, 0 IP records
+2025-09-16 21:52:59 [restartedMain] INFO  o.a.c.i.engine.AbstractCamelContext - Apache Camel 4.4.0 (XP-ESB) is starting
+2025-09-16 21:52:59 [restartedMain] INFO  o.a.c.i.engine.AbstractCamelContext - MDC logging is enabled on CamelContext: XP-ESB
+2025-09-16 21:52:59 [restartedMain] INFO  o.a.c.p.aggregate.AggregateProcessor - Defaulting to MemoryAggregationRepository
+2025-09-16 21:52:59 [restartedMain] INFO  o.a.c.p.aggregate.AggregateProcessor - Using CompletionTimeout to trigger after 5000 millis of inactivity.
+2025-09-16 21:52:59 [restartedMain] INFO  o.a.c.s.b.CamelSpringBootApplicationListener - Starting CamelMainRunController to ensure the main thread keeps running
+2025-09-16 21:52:59 [CamelMainRunController] INFO  org.apache.camel.main.MainSupport - Apache Camel (Main) 4.4.0 is starting
+2025-09-16 21:52:59 [restartedMain] INFO  o.a.c.i.engine.AbstractCamelContext - Routes startup (started:11)
+2025-09-16 21:52:59 [restartedMain] INFO  o.a.c.i.engine.AbstractCamelContext -     Started rest-to-soap-bridge (servlet:/api-to-soap)
+2025-09-16 21:52:59 [restartedMain] INFO  o.a.c.i.engine.AbstractCamelContext -     Started get-all-products-soap (direct://getAllProductsSOAP)
+2025-09-16 21:52:59 [restartedMain] INFO  o.a.c.i.engine.AbstractCamelContext -     Started get-product-by-id-soap (direct://getProductByIdSOAP)
+2025-09-16 21:52:59 [restartedMain] INFO  o.a.c.i.engine.AbstractCamelContext -     Started soap-to-json-transformer (direct://transformSoapToJson)
+2025-09-16 21:52:59 [restartedMain] INFO  o.a.c.i.engine.AbstractCamelContext -     Started message-aggregator (servlet:/aggregate)
+2025-09-16 21:52:59 [restartedMain] INFO  o.a.c.i.engine.AbstractCamelContext -     Started content-based-router (servlet:/route)
+2025-09-16 21:52:59 [restartedMain] INFO  o.a.c.i.engine.AbstractCamelContext -     Started load-balancer (servlet:/loadbalance)
+2025-09-16 21:52:59 [restartedMain] INFO  o.a.c.i.engine.AbstractCamelContext -     Started circuit-breaker (servlet:/circuit-breaker)
+2025-09-16 21:52:59 [restartedMain] INFO  o.a.c.i.engine.AbstractCamelContext -     Started message-enricher (servlet:/enrich)
+2025-09-16 21:52:59 [restartedMain] INFO  o.a.c.i.engine.AbstractCamelContext -     Started dead-letter-channel (servlet:/deadletter)
+2025-09-16 21:52:59 [restartedMain] INFO  o.a.c.i.engine.AbstractCamelContext -     Started dead-letter-queue (direct://deadLetterQueue)
+2025-09-16 21:52:59 [restartedMain] INFO  o.a.c.i.engine.AbstractCamelContext - Apache Camel 4.4.0 (XP-ESB) started in 81ms (build:0ms init:0ms start:81ms)
+2025-09-16 21:52:59 [restartedMain] INFO  com.xp.XpApplication - Started XpApplication in 3.125 seconds (process running for 131.449)
+2025-09-16 21:52:59 [restartedMain] INFO  com.xp.config.DataLoader - Loading initial data...
+2025-09-16 21:52:59 [restartedMain] INFO  com.xp.config.DataLoader - Sample products created successfully
+2025-09-16 21:52:59 [restartedMain] INFO  com.xp.config.DataLoader - Sample customers created successfully
+2025-09-16 21:52:59 [restartedMain] INFO  com.xp.config.DataLoader - Sample users created successfully
+2025-09-16 21:52:59 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-09-16 21:54:10 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-09-16 21:54:10 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-09-16 21:54:10 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-09-16 21:54:10 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/authenticate
+2025-09-16 21:54:10 [http-nio-8080-exec-1] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2025-09-16 21:54:10 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/authenticate
+2025-09-16 21:54:11 [http-nio-8080-exec-1] DEBUG o.s.s.a.d.DaoAuthenticationProvider - Failed to authenticate since password does not match stored value
+2025-09-16 21:54:11 [http-nio-8080-exec-1] WARN  c.x.s.SecurityAuditEventListener - SECURITY_AUDIT: AUTHENTICATION_FAILURE - User: admin | Details: unknown | Timestamp: 2025-09-16T21:54:11.028325400
+2025-09-16 21:54:11 [http-nio-8080-exec-1] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [org.springframework.security.authentication.BadCredentialsException: Bad credentials]
+2025-09-16 21:54:41 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/authenticate
+2025-09-16 21:54:41 [http-nio-8080-exec-3] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2025-09-16 21:54:41 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/authenticate
+2025-09-16 21:54:41 [http-nio-8080-exec-3] DEBUG o.s.s.a.d.DaoAuthenticationProvider - Authenticated user
+2025-09-16 21:54:41 [http-nio-8080-exec-3] INFO  c.x.s.SecurityAuditEventListener - SECURITY_AUDIT: AUTHENTICATION_SUCCESS - User: admin | Authorities: [ROLE_ADMIN] | Timestamp: 2025-09-16T21:54:41.703064200
+2025-09-16 21:54:41 [http-nio-8080-exec-3] INFO  c.x.s.SecurityAuditEventListener - LGPD_AUDIT: USER_LOGIN - Requestor: anonymousUser | DataSubject: admin | Details: User successfully authenticated | Timestamp: 2025-09-16T21:54:41.705081700
+2025-09-16 21:54:59 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/products
+2025-09-16 21:54:59 [http-nio-8080-exec-5] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2025-09-16 21:54:59 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/products
+2025-09-16 21:54:59 [http-nio-8080-exec-5] DEBUG c.x.security.AnomalyDetectionService - New location detected for IP: 0:0:0:0:0:0:0:1
+2025-09-16 21:54:59 [http-nio-8080-exec-5] ERROR c.x.s.SecurityAuditEventListener - SECURITY_AUDIT: SECURITY_VIOLATION - User: anonymousUser | Violation: Login from new geographical location | Details: IP: 0:0:0:0:0:0:0:1 | Time: 2025-09-16T21:54:59.019500300 | Timestamp: 2025-09-16T21:54:59.019500300
+2025-09-16 21:54:59 [http-nio-8080-exec-5] WARN  c.x.security.AnomalyDetectionService - ANOMALY_DETECTED: User: anonymousUser | Type: Login from new geographical location | IP: 0:0:0:0:0:0:0:1 | Time: 2025-09-16T21:54:59.019500300
+2025-09-16 21:54:59 [http-nio-8080-exec-5] INFO  c.x.s.SecurityAuditEventListener - SECURITY_AUDIT: DATA_ACCESS - User: anonymousUser | Resource: /api/products | Action: GET | Info: User: anonymousUser | IP: 0:0:0:0:0:0:0:1 | Timestamp: 2025-09-16T21:54:59.020500600
