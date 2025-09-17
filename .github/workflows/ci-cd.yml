@@ -203,8 +203,183 @@ jobs:
     - name: Build Docker image
       run: docker build -t xp-application:${{ github.sha }} .
     
-  deploy:
+  dast:
     needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+    
+    - name: Start application for DAST testing
+      run: |
+        echo "Iniciando aplicação para testes DAST..."
+        mvn spring-boot:run -Dspring-boot.run.profiles=test &
+        sleep 60
+        echo "Aplicação iniciada, aguardando estabilização..."
+        sleep 30
+    
+    - name: Wait for application to be ready
+      run: |
+        for i in {1..30}; do
+          if curl -f http://localhost:8080/actuator/health; then
+            echo "Aplicação está pronta para testes DAST"
+            break
+          fi
+          echo "Aguardando aplicação... tentativa $i/30"
+          sleep 10
+        done
+    
+    - name: Run OWASP ZAP Baseline Scan
+      run: |
+        echo "Executando OWASP ZAP Baseline Scan..."
+        docker run -t owasp/zap2docker-stable zap-baseline.py \
+          -t http://host.docker.internal:8080 \
+          -J zap-baseline-report.json \
+          -x zap-baseline-report.xml \
+          -r zap-baseline-report.html \
+          -I \
+          -j \
+          --hook=/zap/auth_hook.py \
+          -z "config api.disablekey=true; config scanner.attackOnStart=true; config view.mode=attack; config connection.dnsTtlSuccessfulQueries=-1"
+    
+    - name: Run Nikto Web Vulnerability Scanner
+      run: |
+        echo "Executando Nikto Web Vulnerability Scanner..."
+        docker run --rm -v $(pwd):/tmp/reports \
+          sullo/nikto -h http://host.docker.internal:8080 \
+          -output /tmp/reports/nikto-report.html \
+          -Format htm \
+          -Tuning 1,2,3,4,5,6,7,8,9,0,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z
+    
+    - name: Run Custom Security Tests
+      run: |
+        echo "Executando testes de segurança customizados..."
+        python3 scripts/security-tests.py http://localhost:8080
+    
+    - name: Generate DAST Report
+      run: |
+        echo "# Relatório de Testes Dinâmicos de Segurança (DAST)" > dast-report.md
+        echo "Data: $(date)" >> dast-report.md
+        echo "" >> dast-report.md
+        echo "## Resumo dos Testes DAST" >> dast-report.md
+        echo "" >> dast-report.md
+        
+        # Verificar relatórios OWASP ZAP
+        if [ -f "zap-baseline-report.html" ]; then
+          echo "✅ OWASP ZAP Baseline Scan: SUCESSO" >> dast-report.md
+          echo "- Relatório HTML: zap-baseline-report.html" >> dast-report.md
+          echo "- Relatório JSON: zap-baseline-report.json" >> dast-report.md
+          echo "- Relatório XML: zap-baseline-report.xml" >> dast-report.md
+        else
+          echo "❌ OWASP ZAP Baseline Scan: FALHOU" >> dast-report.md
+        fi
+        echo "" >> dast-report.md
+        
+        # Verificar relatórios Nikto
+        if [ -f "nikto-report.html" ]; then
+          echo "✅ Nikto Web Vulnerability Scanner: SUCESSO" >> dast-report.md
+          echo "- Relatório: nikto-report.html" >> dast-report.md
+        else
+          echo "❌ Nikto Web Vulnerability Scanner: FALHOU" >> dast-report.md
+        fi
+        echo "" >> dast-report.md
+        
+        # Verificar testes customizados
+        if [ -f "security-tests-report.json" ]; then
+          echo "✅ Testes de Segurança Customizados: SUCESSO" >> dast-report.md
+          echo "- Relatório: security-tests-report.json" >> dast-report.md
+        else
+          echo "❌ Testes de Segurança Customizados: FALHOU" >> dast-report.md
+        fi
+        echo "" >> dast-report.md
+        
+        echo "## Vulnerabilidades Identificadas" >> dast-report.md
+        echo "" >> dast-report.md
+        
+        # Analisar relatório ZAP JSON
+        if [ -f "zap-baseline-report.json" ]; then
+          HIGH_COUNT=$(jq '.High' zap-baseline-report.json 2>/dev/null || echo "0")
+          MEDIUM_COUNT=$(jq '.Medium' zap-baseline-report.json 2>/dev/null || echo "0")
+          LOW_COUNT=$(jq '.Low' zap-baseline-report.json 2>/dev/null || echo "0")
+          INFO_COUNT=$(jq '.Informational' zap-baseline-report.json 2>/dev/null || echo "0")
+          
+          echo "### OWASP ZAP - Vulnerabilidades por Severidade:" >> dast-report.md
+          echo "- **Alta**: $HIGH_COUNT" >> dast-report.md
+          echo "- **Média**: $MEDIUM_COUNT" >> dast-report.md
+          echo "- **Baixa**: $LOW_COUNT" >> dast-report.md
+          echo "- **Informativa**: $INFO_COUNT" >> dast-report.md
+        fi
+        echo "" >> dast-report.md
+        
+        echo "## Recomendações de Mitigação" >> dast-report.md
+        echo "" >> dast-report.md
+        echo "1. **Prioridade Alta**: Corrigir vulnerabilidades de alta severidade identificadas pelo ZAP" >> dast-report.md
+        echo "2. **Prioridade Média**: Revisar e corrigir vulnerabilidades de média severidade" >> dast-report.md
+        echo "3. **Configuração**: Implementar headers de segurança adicionais" >> dast-report.md
+        echo "4. **Monitoramento**: Configurar alertas para tentativas de ataque" >> dast-report.md
+        echo "5. **Testes Regulares**: Executar testes DAST em cada deploy" >> dast-report.md
+    
+    - name: Display DAST Summary
+      run: |
+        echo "=========================================="
+        echo "🔍 RESUMO DOS TESTES DAST"
+        echo "=========================================="
+        echo ""
+        if [ -f "zap-baseline-report.html" ]; then
+          echo "✅ OWASP ZAP Baseline Scan: SUCESSO"
+          echo "   📄 Relatório: zap-baseline-report.html"
+        else
+          echo "❌ OWASP ZAP Baseline Scan: FALHOU"
+        fi
+        echo ""
+        if [ -f "nikto-report.html" ]; then
+          echo "✅ Nikto Web Vulnerability Scanner: SUCESSO"
+          echo "   📄 Relatório: nikto-report.html"
+        else
+          echo "❌ Nikto Web Vulnerability Scanner: FALHOU"
+        fi
+        echo ""
+        if [ -f "security-tests-report.json" ]; then
+          echo "✅ Testes de Segurança Customizados: SUCESSO"
+          echo "   📄 Relatório: security-tests-report.json"
+        else
+          echo "❌ Testes de Segurança Customizados: FALHOU"
+        fi
+        echo ""
+        if [ -f "dast-report.md" ]; then
+          echo "✅ Relatório Consolidado: dast-report.md"
+        fi
+        echo ""
+        echo "📦 Todos os relatórios foram salvos como artefatos"
+        echo "=========================================="
+    
+    - name: Upload DAST Reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: dast-reports
+        path: |
+          zap-baseline-report.html
+          zap-baseline-report.json
+          zap-baseline-report.xml
+          nikto-report.html
+          security-tests-report.json
+          dast-report.md
+        retention-days: 30
+    
+    - name: Stop application
+      if: always()
+      run: |
+        echo "Parando aplicação..."
+        pkill -f "spring-boot:run" || true
+
+  deploy:
+    needs: [build, dast]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     
