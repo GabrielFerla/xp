@@ -39,17 +39,17 @@ timeout /t 90 /nobreak >nul
 
 echo.
 echo [3/6] Verificando se aplicação está rodando...
-for /L %%i in (1,1,5) do (
+for /L %%i in (1,1,10) do (
     curl -f http://localhost:8082/actuator/health >nul 2>&1
     if !ERRORLEVEL! equ 0 (
         echo ✅ Aplicação está rodando e pronta para testes
         goto :app_ready
     )
-    echo Aguardando aplicação... tentativa %%i/5
-    timeout /t 10 /nobreak >nul
+    echo Aguardando aplicação... tentativa %%i/10
+    timeout /t 15 /nobreak >nul
 )
 
-echo ❌ ERRO: Aplicação não está respondendo após 5 minutos
+echo ❌ ERRO: Aplicação não está respondendo após 2.5 minutos
 echo Verifique se a aplicação iniciou corretamente
 pause
 exit /b 1
