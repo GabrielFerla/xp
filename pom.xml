@@ -245,13 +245,6 @@
 				</configuration>
 			</plugin>
 			
-			<!-- SonarQube Plugin for Code Quality and Security Analysis -->
-			<plugin>
-				<groupId>org.sonarsource.scanner.maven</groupId>
-				<artifactId>sonar-maven-plugin</artifactId>
-				<version>3.11.0.3922</version>
-			</plugin>
-			
 			<!-- JaCoCo Plugin for Code Coverage -->
 			<plugin>
 				<groupId>org.jacoco</groupId>

@@ -1,8 +1,12 @@
-# Configuração do SonarQube para SAST
+# Configuração SAST Híbrida
 
 ## Visão Geral
 
-O SonarQube foi implementado como solução principal para análise SAST, substituindo OWASP Dependency Check e SpotBugs por uma solução mais robusta e confiável.
+Implementei uma solução SAST híbrida que combina múltiplas ferramentas para máxima cobertura e confiabilidade:
+
+- **SpotBugs**: Análise de código estático e bugs de segurança
+- **OWASP Dependency Check**: Análise de vulnerabilidades em dependências
+- **JaCoCo**: Cobertura de testes
 
 ## Configuração no GitHub Actions
 
