@@ -39,7 +39,7 @@ services:
 
   # OWASP ZAP para análise complementar
   zap:
-    image: owasp/zap2docker-stable
+    image: zaproxy/zap-stable
     ports:
       - "8081:8080"
     volumes:

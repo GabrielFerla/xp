@@ -68,7 +68,7 @@ if %ERRORLEVEL% neq 0 (
 echo.
 echo [5/7] Executando OWASP ZAP Baseline Scan (complementar)...
 echo Executando ZAP para análise mais detalhada...
-docker run -t --rm -v "%cd%":/zap/wrk/:rw owasp/zap2docker-stable zap-baseline.py ^
+docker run -t --rm -v "%cd%":/zap/wrk/:rw zaproxy/zap-stable zap-baseline.py ^
   -t http://host.docker.internal:8082 ^
   -J zap-baseline-report.json ^
   -x zap-baseline-report.xml ^
