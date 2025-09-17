@@ -54,7 +54,7 @@ fi
 echo ""
 echo "[4/6] Executando OWASP ZAP Baseline Scan..."
 echo "Baixando e executando OWASP ZAP..."
-docker run -t --rm -v "$(pwd)":/zap/wrk/:rw owasp/zap2docker-stable zap-baseline.py \
+docker run -t --rm -v "$(pwd)":/zap/wrk/:rw zaproxy/zap-stable zap-baseline.py \
   -t http://host.docker.internal:8080 \
   -J zap-baseline-report.json \
   -x zap-baseline-report.xml \

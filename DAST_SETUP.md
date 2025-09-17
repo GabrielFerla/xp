@@ -86,10 +86,10 @@ docker-compose -f docker-compose-dast.yml down
 #### OWASP ZAP
 ```bash
 # Execução básica
-docker run -t owasp/zap2docker-stable zap-baseline.py -t http://localhost:8080
+docker run -t zaproxy/zap-stable zap-baseline.py -t http://localhost:8080
 
 # Execução com relatórios
-docker run -t owasp/zap2docker-stable zap-baseline.py \
+docker run -t zaproxy/zap-stable zap-baseline.py \
   -t http://localhost:8080 \
   -J report.json \
   -x report.xml \
@@ -217,7 +217,7 @@ df -h
 #### Habilitar Logs Detalhados
 ```bash
 # Para OWASP ZAP
-docker run -t owasp/zap2docker-stable zap-baseline.py \
+docker run -t zaproxy/zap-stable zap-baseline.py \
   -t http://localhost:8080 \
   -v 10
 
@@ -287,7 +287,7 @@ Para problemas ou dúvidas:
 Para manter as ferramentas atualizadas:
 ```bash
 # Atualizar imagens Docker
-docker pull owasp/zap2docker-stable
+docker pull zaproxy/zap-stable
 docker pull sullo/nikto
 docker pull paoloo/sqlmap
 docker pull wapiti-scanner/wapiti
