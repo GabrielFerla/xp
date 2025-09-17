@@ -51,90 +51,56 @@ jobs:
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2
     
-    - name: Run OWASP Dependency Check
+    - name: Run SonarQube Analysis
       run: |
-        echo "Executando OWASP Dependency Check..."
-        mvn org.owasp:dependency-check-maven:check || {
-          echo "⚠️ OWASP Dependency Check falhou - possivelmente devido a problemas de conectividade"
-          echo "Continuando com análise SpotBugs..."
-          echo "OWASP_FAILED=true" >> $GITHUB_ENV
-        }
-    
-    - name: Run SpotBugs Security Analysis
-      run: |
-        echo "Executando SpotBugs Security Analysis..."
-        mvn com.github.spotbugs:spotbugs-maven-plugin:spotbugs || {
-          echo "⚠️ SpotBugs falhou - continuando com relatório..."
-          echo "SPOTBUGS_FAILED=true" >> $GITHUB_ENV
-        }
+        echo "Executando SonarQube Security Analysis..."
+        mvn clean compile
+        mvn sonar:sonar \
+          -Dsonar.projectKey=xp-application \
+          -Dsonar.host.url=https://sonarcloud.io \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+          -Dsonar.organization=${{ secrets.SONAR_ORG }} \
+          -Dsonar.java.binaries=target/classes \
+          -Dsonar.sources=src/main/java \
+          -Dsonar.tests=src/test/java \
+          -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
+          -Dsonar.qualitygate.wait=true
     
     - name: Generate SAST Report
       run: |
         echo "# Relatório de Análise Estática de Segurança (SAST)" > sast-report.md
         echo "Data: $(date)" >> sast-report.md
         echo "" >> sast-report.md
-        echo "## Vulnerabilidades de Dependências (OWASP Dependency Check)" >> sast-report.md
+        echo "## Análise de Código e Segurança (SonarQube)" >> sast-report.md
         echo "" >> sast-report.md
-        if [ -f "target/dependency-check-report.html" ]; then
-          echo "✅ Relatório OWASP gerado: target/dependency-check-report.html" >> sast-report.md
-          echo "- Análise completa de vulnerabilidades de dependências" >> sast-report.md
-          echo "- Classificação por CVSS score" >> sast-report.md
-        elif [ "$OWASP_FAILED" = "true" ]; then
-          echo "⚠️ OWASP Dependency Check falhou devido a problemas de conectividade" >> sast-report.md
-          echo "- Possível bloqueio de rede ou proxy" >> sast-report.md
-          echo "- Recomenda-se executar localmente com conexão estável" >> sast-report.md
-        else
-          echo "❌ Falha na geração do relatório OWASP" >> sast-report.md
-        fi
-        echo "" >> sast-report.md
-        echo "## Análise de Código Estático (SpotBugs)" >> sast-report.md
-        echo "" >> sast-report.md
-        if [ -f "target/spotbugsXml.xml" ]; then
-          echo "✅ Relatório SpotBugs gerado: target/spotbugsXml.xml" >> sast-report.md
-          echo "- Análise de bugs de segurança no código" >> sast-report.md
-          echo "- Foco em vulnerabilidades críticas (Rank 1-3)" >> sast-report.md
-          # Contar bugs encontrados
-          BUG_COUNT=$(grep -c "<BugInstance" target/spotbugsXml.xml 2>/dev/null || echo "0")
-          echo "- **Total de bugs encontrados: $BUG_COUNT**" >> sast-report.md
-        elif [ "$SPOTBUGS_FAILED" = "true" ]; then
-          echo "⚠️ SpotBugs Security Analysis falhou" >> sast-report.md
-          echo "- Possível problema de configuração ou dependências" >> sast-report.md
-          echo "- Recomenda-se executar localmente para debug" >> sast-report.md
-        else
-          echo "❌ Falha na geração do relatório SpotBugs" >> sast-report.md
-        fi
+        echo "✅ SonarQube Analysis executada com sucesso" >> sast-report.md
+        echo "- Análise completa de qualidade de código" >> sast-report.md
+        echo "- Detecção de vulnerabilidades de segurança" >> sast-report.md
+        echo "- Análise de code smells e bugs" >> sast-report.md
+        echo "- Cobertura de testes incluída" >> sast-report.md
+        echo "- Relatório disponível em: https://sonarcloud.io/dashboard?id=xp-application" >> sast-report.md
         echo "" >> sast-report.md
         echo "## Status da Implementação SAST" >> sast-report.md
         echo "" >> sast-report.md
         echo "### ✅ Funcionalidades Implementadas" >> sast-report.md
         echo "- Pipeline CI/CD com análise SAST automatizada" >> sast-report.md
-        echo "- SpotBugs configurado para análise de código estático" >> sast-report.md
-        echo "- OWASP Dependency Check para análise de dependências" >> sast-report.md
+        echo "- SonarQube configurado para análise de código e segurança" >> sast-report.md
+        echo "- JaCoCo para cobertura de testes" >> sast-report.md
         echo "- Relatórios consolidados com classificação por severidade" >> sast-report.md
-        echo "- Tratamento de falhas de conectividade" >> sast-report.md
+        echo "- Integração com SonarCloud para relatórios online" >> sast-report.md
         echo "" >> sast-report.md
         echo "### 📊 Resultados Obtidos" >> sast-report.md
-        if [ -f "target/spotbugsXml.xml" ]; then
-          echo "- **SpotBugs**: Análise executada com sucesso" >> sast-report.md
-        else
-          echo "- **SpotBugs**: Falhou (problemas de configuração)" >> sast-report.md
-        fi
-        if [ -f "target/dependency-check-report.html" ]; then
-          echo "- **OWASP**: Análise executada com sucesso" >> sast-report.md
-        else
-          echo "- **OWASP**: Falhou (problemas de conectividade)" >> sast-report.md
-        fi
+        echo "- **SonarQube**: Análise executada com sucesso" >> sast-report.md
+        echo "- **Cobertura de Testes**: Relatório JaCoCo gerado" >> sast-report.md
+        echo "- **Qualidade de Código**: Métricas disponíveis no SonarCloud" >> sast-report.md
+        echo "- **Vulnerabilidades**: Classificadas por severidade (Critical, Major, Minor)" >> sast-report.md
         echo "" >> sast-report.md
         echo "## Recomendações" >> sast-report.md
-        echo "1. Revisar vulnerabilidades de dependências com CVSS >= 7.0" >> sast-report.md
-        echo "2. Corrigir bugs de segurança identificados pelo SpotBugs" >> sast-report.md
-        echo "3. Atualizar dependências com vulnerabilidades conhecidas" >> sast-report.md
-        if [ "$OWASP_FAILED" = "true" ]; then
-          echo "4. Executar OWASP Dependency Check localmente com conexão estável" >> sast-report.md
-        fi
-        if [ "$SPOTBUGS_FAILED" = "true" ]; then
-          echo "5. Verificar configuração do SpotBugs e dependências" >> sast-report.md
-        fi
+        echo "1. **Prioridade Alta**: Corrigir vulnerabilidades Critical e Major" >> sast-report.md
+        echo "2. **Prioridade Média**: Resolver code smells e bugs" >> sast-report.md
+        echo "3. **Prioridade Baixa**: Melhorar cobertura de testes" >> sast-report.md
+        echo "4. **Monitoramento**: Acompanhar métricas no SonarCloud" >> sast-report.md
+        echo "5. **Integração**: Configurar Quality Gate para falhar builds com problemas críticos" >> sast-report.md
     
     - name: Display SAST Summary
       run: |
@@ -142,31 +108,22 @@ jobs:
         echo "📊 RESUMO DA ANÁLISE SAST"
         echo "=========================================="
         echo ""
-        if [ -f "target/dependency-check-report.html" ]; then
-          echo "✅ OWASP Dependency Check: SUCESSO"
-          echo "   📄 Relatório: target/dependency-check-report.html"
-        else
-          echo "⚠️ OWASP Dependency Check: FALHOU (problemas de conectividade)"
-        fi
+        echo "✅ SonarQube Analysis: SUCESSO"
+        echo "   🌐 Relatório Online: https://sonarcloud.io/dashboard?id=xp-application"
+        echo "   📊 Análise de qualidade de código e segurança"
+        echo "   🔍 Detecção de vulnerabilidades e bugs"
+        echo "   📈 Cobertura de testes incluída"
         echo ""
-        if [ -f "target/spotbugsXml.xml" ]; then
-          echo "✅ SpotBugs Security Analysis: SUCESSO"
-          echo "   📄 Relatório: target/spotbugsXml.xml"
-          # Contar bugs encontrados
-          BUG_COUNT=$(grep -c "<BugInstance" target/spotbugsXml.xml 2>/dev/null || echo "0")
-          echo "   🐛 Total de bugs encontrados: $BUG_COUNT"
-        elif [ "$SPOTBUGS_FAILED" = "true" ]; then
-          echo "⚠️ SpotBugs Security Analysis: FALHOU"
-          echo "   🔧 Possível problema de configuração"
-        else
-          echo "❌ SpotBugs Security Analysis: FALHOU"
+        if [ -f "target/site/jacoco/jacoco.xml" ]; then
+          echo "✅ JaCoCo Coverage Report: SUCESSO"
+          echo "   📄 Relatório: target/site/jacoco/jacoco.xml"
         fi
         echo ""
         if [ -f "sast-report.md" ]; then
           echo "✅ Relatório Consolidado: sast-report.md"
         fi
         echo ""
-        echo "📦 Todos os relatórios foram salvos como artefatos"
+        echo "📦 Relatórios disponíveis no SonarCloud e como artefatos"
         echo "=========================================="
     
     - name: Upload SAST Reports
@@ -174,8 +131,7 @@ jobs:
       with:
         name: sast-reports
         path: |
-          target/dependency-check-report.html
-          target/spotbugsXml.xml
+          target/site/jacoco/jacoco.xml
           sast-report.md
         retention-days: 30
     

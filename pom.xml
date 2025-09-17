@@ -245,22 +245,32 @@
 				</configuration>
 			</plugin>
 			
-			<!-- SpotBugs Plugin for Security Analysis -->
+			<!-- SonarQube Plugin for Code Quality and Security Analysis -->
 			<plugin>
-				<groupId>com.github.spotbugs</groupId>
-				<artifactId>spotbugs-maven-plugin</artifactId>
-				<version>4.7.3.6</version>
-				<configuration>
-					<effort>Max</effort>
-					<threshold>Low</threshold>
-					<includeFilterFile>src/main/resources/spotbugs-security-include.xml</includeFilterFile>
-					<!-- Não falhar o build quando encontrar bugs -->
-					<failOnError>false</failOnError>
-					<!-- Gerar relatório XML -->
-					<xmlOutput>true</xmlOutput>
-					<xmlOutputDirectory>${project.build.directory}</xmlOutputDirectory>
-					<spotbugsXmlOutputFilename>spotbugsXml.xml</spotbugsXmlOutputFilename>
-				</configuration>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>3.11.0.3922</version>
+			</plugin>
+			
+			<!-- JaCoCo Plugin for Code Coverage -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.11</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
