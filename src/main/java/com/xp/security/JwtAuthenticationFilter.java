@@ -2,7 +2,6 @@ package com.xp.security;
 
 import java.io.IOException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,6 +41,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String username;
         
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            // Se não há token, continua a cadeia de filtros
+            // O Spring Security irá verificar se a requisição precisa de autenticação
             filterChain.doFilter(request, response);
             return;
         }

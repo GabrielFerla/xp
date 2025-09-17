@@ -2,7 +2,6 @@ package com.xp.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -46,7 +45,7 @@ public class SecurityConfig {
      */    
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtService jwtService) throws Exception {        http            .csrf(csrf -> csrf
-                .ignoringRequestMatchers("/api/auth/authenticate", "/api/auth/refresh", "/h2-console/**", "/api/products/**", "/api/customers/**", "/esb/**", "/ws/**", "/api/lgpd/**")
+                .ignoringRequestMatchers("/api/auth/authenticate", "/api/auth/refresh", "/h2-console/**", "/esb/**", "/ws/**", "/api/lgpd/**")
             )
             .headers(headers -> headers
                 .frameOptions(frameOptions -> frameOptions.sameOrigin())
@@ -61,11 +60,10 @@ public class SecurityConfig {
                     .requestMatchers("/h2-console/**").permitAll()
                     .requestMatchers("/swagger-ui/**", "/api-docs/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
                     .requestMatchers("/actuator/**").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
                     .requestMatchers("/error").permitAll()
                     .anyRequest().authenticated()
             )            .sessionManagement(sess -> sess
-                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .sessionConcurrency(sessionConcurrency -> sessionConcurrency
                     .maximumSessions(1)
                     .maxSessionsPreventsLogin(false)))
