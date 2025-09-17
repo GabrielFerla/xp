@@ -34,3 +34,6 @@ build/
 
 
 .logs/security-audit.log
+
+### OWASP Dependency Check Cache ###
+.dependency-check/

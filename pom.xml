@@ -223,8 +223,28 @@
 				<configuration>
 					<failBuildOnCVSS>7</failBuildOnCVSS>
 					<suppressionFiles>
-						<suppressionFile>src/main/resources/owasp-suppression.xml</suppressionFile>
+						<suppressionFile>owasp-suppression.xml</suppressionFile>
 					</suppressionFiles>
+					<!-- Configurações para lidar com problemas de conectividade -->
+					<connectionTimeout>30000</connectionTimeout>
+					<readTimeout>30000</readTimeout>
+					<retryCount>3</retryCount>
+					<retryDelay>5000</retryDelay>
+					<!-- Usar cache local quando possível -->
+					<dataDirectory>${project.basedir}/.dependency-check</dataDirectory>
+					<!-- Configurações de proxy (descomente se necessário) -->
+					<!--
+					<proxyServer>proxy.company.com</proxyServer>
+					<proxyPort>8080</proxyPort>
+					<proxyUsername>username</proxyUsername>
+					<proxyPassword>password</proxyPassword>
+					-->
+					<!-- Desabilitar verificação SSL se necessário -->
+					<disableSSL>false</disableSSL>
+					<!-- Usar apenas análise local quando NVD não estiver disponível -->
+					<nvdApiKey></nvdApiKey>
+					<nvdApiDelay>2000</nvdApiDelay>
+					<nvdApiMaxRetryCount>3</nvdApiMaxRetryCount>
 				</configuration>
 				<executions>
 					<execution>

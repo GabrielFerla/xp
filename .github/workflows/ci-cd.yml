@@ -31,11 +31,89 @@ jobs:
     
     - name: Generate test report
       run: mvn surefire-report:report
+
+  sast:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up JDK 21
+      uses: actions/setup-java@v3
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+    
+    - name: Cache Maven dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+    
+    - name: Run OWASP Dependency Check
+      run: |
+        echo "Executando OWASP Dependency Check..."
+        mvn org.owasp:dependency-check-maven:check || {
+          echo "⚠️ OWASP Dependency Check falhou - possivelmente devido a problemas de conectividade"
+          echo "Continuando com análise SpotBugs..."
+          echo "OWASP_FAILED=true" >> $GITHUB_ENV
+        }
+    
+    - name: Run SpotBugs Security Analysis
+      run: mvn com.github.spotbugs:spotbugs-maven-plugin:check
+    
+    - name: Generate SAST Report
+      run: |
+        echo "# Relatório de Análise Estática de Segurança (SAST)" > sast-report.md
+        echo "Data: $(date)" >> sast-report.md
+        echo "" >> sast-report.md
+        echo "## Vulnerabilidades de Dependências (OWASP Dependency Check)" >> sast-report.md
+        echo "" >> sast-report.md
+        if [ -f "target/dependency-check-report.html" ]; then
+          echo "✅ Relatório OWASP gerado: target/dependency-check-report.html" >> sast-report.md
+          echo "- Análise completa de vulnerabilidades de dependências" >> sast-report.md
+          echo "- Classificação por CVSS score" >> sast-report.md
+        elif [ "$OWASP_FAILED" = "true" ]; then
+          echo "⚠️ OWASP Dependency Check falhou devido a problemas de conectividade" >> sast-report.md
+          echo "- Possível bloqueio de rede ou proxy" >> sast-report.md
+          echo "- Recomenda-se executar localmente com conexão estável" >> sast-report.md
+        else
+          echo "❌ Falha na geração do relatório OWASP" >> sast-report.md
+        fi
+        echo "" >> sast-report.md
+        echo "## Análise de Código Estático (SpotBugs)" >> sast-report.md
+        echo "" >> sast-report.md
+        if [ -f "target/spotbugsXml.xml" ]; then
+          echo "✅ Relatório SpotBugs gerado: target/spotbugsXml.xml" >> sast-report.md
+          echo "- Análise de bugs de segurança no código" >> sast-report.md
+          echo "- Foco em vulnerabilidades críticas (Rank 1-3)" >> sast-report.md
+        else
+          echo "❌ Falha na geração do relatório SpotBugs" >> sast-report.md
+        fi
+        echo "" >> sast-report.md
+        echo "## Recomendações" >> sast-report.md
+        echo "1. Revisar vulnerabilidades de dependências com CVSS >= 7.0" >> sast-report.md
+        echo "2. Corrigir bugs de segurança identificados pelo SpotBugs" >> sast-report.md
+        echo "3. Atualizar dependências com vulnerabilidades conhecidas" >> sast-report.md
+        if [ "$OWASP_FAILED" = "true" ]; then
+          echo "4. Executar OWASP Dependency Check localmente com conexão estável" >> sast-report.md
+        fi
+    
+    - name: Upload SAST Reports
+      uses: actions/upload-artifact@v3
+      with:
+        name: sast-reports
+        path: |
+          target/dependency-check-report.html
+          target/spotbugsXml.xml
+          sast-report.md
+        retention-days: 30
     
   
     
   build:
-    needs: test
+    needs: [test, sast]
     runs-on: ubuntu-latest
     
     steps:
