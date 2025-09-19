@@ -316,23 +316,21 @@ jobs:
         # No Ubuntu/GitHub Actions, usar --network host para acessar localhost
         # Remover arquivo zap.yaml se existir para evitar conflitos de configuração
         rm -f zap.yaml
-        # Usar configuração específica para CI/CD
-        cp zap-cicd.yaml zap.yaml
         # Criar diretório de trabalho com permissões corretas
         mkdir -p zap-reports
         chmod 755 zap-reports
+        # Executar ZAP sem arquivo de configuração YAML
         docker run -t --rm --network host -v $(pwd):/zap/wrk/:rw -u $(id -u):$(id -g) zaproxy/zap-stable zap-baseline.py \
           -t http://localhost:8080 \
           -J zap-baseline-report.json \
           -x zap-baseline-report.xml \
           -r zap-baseline-report.html \
-          -I
+          -I \
+          -z "-config api.disablekey=true"
         
         # Verificar se os relatórios foram gerados
         echo "Verificando relatórios gerados..."
         ls -la zap-baseline-report.* || echo "Nenhum relatório encontrado"
-        # Limpar arquivo temporário
-        rm -f zap.yaml
     
     - name: Generate DAST Report
       run: |
