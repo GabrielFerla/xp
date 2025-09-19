@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔒 Security Dashboard - XP Application</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .last-updated {
+            background: #ecf0f1;
+            padding: 15px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #7f8c8d;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-left: 5px solid;
+            transition: transform 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .metric-card.sast {
+            border-left-color: #3498db;
+        }
+
+        .metric-card.dast {
+            border-left-color: #e74c3c;
+        }
+
+        .metric-card.sca {
+            border-left-color: #f39c12;
+        }
+
+        .metric-card.overall {
+            border-left-color: #27ae60;
+        }
+
+        .metric-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .metric-icon {
+            font-size: 2em;
+            margin-right: 15px;
+        }
+
+        .metric-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .status-success {
+            background: #d5f4e6;
+            color: #27ae60;
+        }
+
+        .status-warning {
+            background: #fef9e7;
+            color: #f39c12;
+        }
+
+        .status-error {
+            background: #fadbd8;
+            color: #e74c3c;
+        }
+
+        .vulnerability-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .vuln-stat {
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .vuln-high {
+            background: #fadbd8;
+            color: #e74c3c;
+        }
+
+        .vuln-medium {
+            background: #fef9e7;
+            color: #f39c12;
+        }
+
+        .vuln-low {
+            background: #d5f4e6;
+            color: #27ae60;
+        }
+
+        .timeline {
+            background: #f8f9fa;
+            padding: 30px;
+            margin: 20px;
+            border-radius: 10px;
+        }
+
+        .timeline h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: white;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .timeline-time {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-right: 15px;
+            min-width: 120px;
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .refresh-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            background: #2980b9;
+        }
+
+        @media (max-width: 768px) {
+            .metrics-grid {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .vulnerability-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔒 Security Dashboard</h1>
+            <p>XP Application - Monitoramento de Segurança Contínua</p>
+        </div>
+
+        <div class="last-updated">
+            <strong>Última atualização:</strong> 19/09/2025 16:52:56
+        </div>
+
+        <div class="metrics-grid">
+            <!-- SAST Card -->
+            <div class="metric-card sast">
+                <div class="metric-header">
+                    <div class="metric-icon">🔍</div>
+                    <div class="metric-title">SAST</div>
+                </div>
+                <div class="status-badge status-warning">✅ Sucesso</div>
+                <p><strong>Análise Estática de Segurança</strong></p>
+                <p>SpotBugs + OWASP Dependency Check</p>
+                <div class="vulnerability-stats">
+                    <div class="vuln-stat vuln-high">
+                        <div>3</div>
+                        <div>Alta</div>
+                    </div>
+                    <div class="vuln-stat vuln-medium">
+                        <div>26</div>
+                        <div>Média</div>
+                    </div>
+                    <div class="vuln-stat vuln-low">
+                        <div>7</div>
+                        <div>Baixa</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DAST Card -->
+            <div class="metric-card dast">
+                <div class="metric-header">
+                    <div class="metric-icon">🌐</div>
+                    <div class="metric-title">DAST</div>
+                </div>
+                <div class="status-badge status-success">✅ Sucesso</div>
+                <p><strong>Análise Dinâmica de Segurança</strong></p>
+                <p>Testes de penetração automatizados</p>
+                <div class="vulnerability-stats">
+                    <div class="vuln-stat vuln-high">
+                        <div>0</div>
+                        <div>Alta</div>
+                    </div>
+                    <div class="vuln-stat vuln-medium">
+                        <div>0</div>
+                        <div>Média</div>
+                    </div>
+                    <div class="vuln-stat vuln-low">
+                        <div>0</div>
+                        <div>Baixa</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCA Card -->
+            <div class="metric-card sca">
+                <div class="metric-header">
+                    <div class="metric-icon">📦</div>
+                    <div class="metric-title">SCA</div>
+                </div>
+                <div class="status-badge status-error">❌ Falhou</div>
+                <p><strong>Análise de Composição de Software</strong></p>
+                <p>OWASP Dependency Check</p>
+                <div class="vulnerability-stats">
+                    <div class="vuln-stat vuln-high">
+                        <div>0</div>
+                        <div>Alta</div>
+                    </div>
+                    <div class="vuln-stat vuln-medium">
+                        <div>0</div>
+                        <div>Média</div>
+                    </div>
+                    <div class="vuln-stat vuln-low">
+                        <div>0</div>
+                        <div>Baixa</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Overall Status Card -->
+            <div class="metric-card overall">
+                <div class="metric-header">
+                    <div class="metric-icon">📊</div>
+                    <div class="metric-title">Status Geral</div>
+                </div>
+                <div class="status-badge status-error">🚨 Crítico</div>
+                <p><strong>Resumo de Segurança</strong></p>
+                <p>Pipeline CI/CD Integrado</p>
+                <div class="vulnerability-stats">
+                    <div class="vuln-stat vuln-high">
+                        <div>3</div>
+                        <div>Críticas</div>
+                    </div>
+                    <div class="vuln-stat vuln-medium">
+                        <div>26</div>
+                        <div>Médias</div>
+                    </div>
+                    <div class="vuln-stat vuln-low">
+                        <div>7</div>
+                        <div>Baixas</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline">
+            <h3>📈 Timeline de Segurança</h3>
+            <div class="timeline-item">
+                <div class="timeline-time">19/09/2025 16:52:56</div>
+                <div class="timeline-content">
+                    <strong>Dashboard:</strong> Atualizado automaticamente pelo pipeline CI/CD
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-time">19/09/2025 16:52:56</div>
+                <div class="timeline-content">
+                    <strong>SCA:</strong> 0 vulnerabilidades críticas, 0 médias, 0 baixas
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-time">19/09/2025 16:52:56</div>
+                <div class="timeline-content">
+                    <strong>DAST:</strong> 0 vulnerabilidades críticas, 0 médias, 0 baixas
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-time">19/09/2025 16:52:56</div>
+                <div class="timeline-content">
+                    <strong>SAST:</strong> 3 vulnerabilidades críticas, 26 médias, 7 baixas
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <button class="refresh-btn" onclick="refreshDashboard()">🔄 Atualizar Dashboard</button>
+        </div>
+
+        <div class="footer">
+            <p><strong>XP Application Security Dashboard</strong></p>
+            <p>Pipeline CI/CD Integrado | SAST + DAST + SCA</p>
+            <p>Última execução: 19/09/2025 16:52:56</p>
+        </div>
+    </div>
+
+    <script>
+        function refreshDashboard() {
+            location.reload();
+        }
+        
+        // Auto-refresh a cada 5 minutos
+        setTimeout(() => {
+            location.reload();
+        }, 300000);
+    </script>
+</body>
+</html>

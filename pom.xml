@@ -204,7 +204,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>3.5.3</version>
 				<configuration>
-					<argLine>-Xmx1024m -XX:+EnableDynamicAgentLoading</argLine>
+					<argLine>@{argLine} -Xmx1024m -XX:+EnableDynamicAgentLoading</argLine>
 					<includes>
 						<include>**/*Test.java</include>
 						<include>**/*Tests.java</include>
@@ -215,34 +215,89 @@
 				</configuration>
 			</plugin>
 			
-			<!-- OWASP Dependency Check Plugin -->
+			<!-- OWASP Dependency Check Plugin - SCA Implementation -->
 			<plugin>
 				<groupId>org.owasp</groupId>
 				<artifactId>dependency-check-maven</artifactId>
-				<version>8.4.0</version>
+				<version>12.1.0</version>
 				<configuration>
+					<!-- Configurações de severidade - falhar apenas em vulnerabilidades críticas -->
 					<failBuildOnCVSS>7</failBuildOnCVSS>
+					
+					<!-- Arquivo de supressão para falsos positivos -->
 					<suppressionFiles>
 						<suppressionFile>owasp-suppression.xml</suppressionFile>
 					</suppressionFiles>
-					<!-- Configurações para lidar com problemas de conectividade -->
+					
+					<!-- Configurações de conectividade otimizadas -->
 					<connectionTimeout>30000</connectionTimeout>
 					<readTimeout>30000</readTimeout>
-					<retryCount>3</retryCount>
-					<retryDelay>5000</retryDelay>
-					<!-- Usar cache local quando possível -->
+					
+					<!-- Cache local para melhor performance -->
 					<dataDirectory>${project.basedir}/.dependency-check</dataDirectory>
-					<!-- Não falhar o build se não conseguir conectar -->
-					<failBuildOnCVSS>0</failBuildOnCVSS>
-					<!-- Usar apenas análise local quando NVD não estiver disponível -->
-					<nvdApiKey></nvdApiKey>
+					<cveValidForHours>24</cveValidForHours>
+					
+					<!-- Configurações da API NVD -->
 					<nvdApiDelay>2000</nvdApiDelay>
-					<nvdApiMaxRetryCount>3</nvdApiMaxRetryCount>
-					<!-- Configurações de relatório -->
-					<format>HTML</format>
-					<format>XML</format>
-					<format>JSON</format>
+					
+					<!-- Análise de dependências transitivas -->
+					<enableExperimental>false</enableExperimental>
+					<enableRetired>false</enableRetired>
+					
+					<!-- Configurações de relatório - todos os formatos -->
+					<format>ALL</format>
+					
+					<!-- Configurações de saída -->
+					<outputDirectory>${project.build.directory}/sca-reports</outputDirectory>
+					
+					<!-- Forçar geração de todos os formatos -->
+					<reportFormat>HTML</reportFormat>
+					<reportFormat>XML</reportFormat>
+					<reportFormat>JSON</reportFormat>
+					<reportFormat>CSV</reportFormat>
+					
+					<!-- Configurações para lidar com problemas de conectividade -->
+					<failOnError>false</failOnError>
+					<autoUpdate>true</autoUpdate>
+					
+					<!-- Configurações de análise -->
+					<enableNVD>true</enableNVD>
+					<enableNPM>true</enableNPM>
+					<enableNUGET>true</enableNUGET>
+					<enablePYPI>true</enablePYPI>
+					<enableRUBYGEMS>true</enableRUBYGEMS>
+					<enableCENTRAL>true</enableCENTRAL>
 				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<phase>verify</phase>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<!-- SpotBugs Plugin for Static Analysis -->
+			<plugin>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
+				<version>4.8.3.0</version>
+				<configuration>
+					<effort>Max</effort>
+					<threshold>Low</threshold>
+					<xmlOutput>true</xmlOutput>
+					<xmlOutputDirectory>${project.build.directory}</xmlOutputDirectory>
+					<includeFilterFile>${project.basedir}/src/main/resources/spotbugs-security-include.xml</includeFilterFile>
+					<failOnError>false</failOnError>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			
 			<!-- JaCoCo Plugin for Code Coverage -->
@@ -262,6 +317,26 @@
 						<goals>
 							<goal>report</goal>
 						</goals>
+					</execution>
+					<execution>
+						<id>check</id>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<rule>
+									<element>BUNDLE</element>
+									<limits>
+										<limit>
+											<counter>INSTRUCTION</counter>
+											<value>COVEREDRATIO</value>
+											<minimum>0.10</minimum>
+										</limit>
+									</limits>
+								</rule>
+							</rules>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
