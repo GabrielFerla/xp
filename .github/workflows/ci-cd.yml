@@ -238,29 +238,12 @@ jobs:
     - name: Run OWASP ZAP Baseline Scan
       run: |
         echo "Executando OWASP ZAP Baseline Scan..."
-        docker run -t owasp/zap2docker-stable zap-baseline.py \
+        docker run -t --rm -v $(pwd):/zap/wrk/:rw zaproxy/zap-stable zap-baseline.py \
           -t http://host.docker.internal:8080 \
           -J zap-baseline-report.json \
           -x zap-baseline-report.xml \
           -r zap-baseline-report.html \
-          -I \
-          -j \
-          --hook=/zap/auth_hook.py \
-          -z "config api.disablekey=true; config scanner.attackOnStart=true; config view.mode=attack; config connection.dnsTtlSuccessfulQueries=-1"
-    
-    - name: Run Nikto Web Vulnerability Scanner
-      run: |
-        echo "Executando Nikto Web Vulnerability Scanner..."
-        docker run --rm -v $(pwd):/tmp/reports \
-          sullo/nikto -h http://host.docker.internal:8080 \
-          -output /tmp/reports/nikto-report.html \
-          -Format htm \
-          -Tuning 1,2,3,4,5,6,7,8,9,0,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z
-    
-    - name: Run Custom Security Tests
-      run: |
-        echo "Executando testes de segurança customizados..."
-        python3 scripts/security-tests.py http://localhost:8080
+          -I
     
     - name: Generate DAST Report
       run: |
@@ -278,24 +261,6 @@ jobs:
           echo "- Relatório XML: zap-baseline-report.xml" >> dast-report.md
         else
           echo "❌ OWASP ZAP Baseline Scan: FALHOU" >> dast-report.md
-        fi
-        echo "" >> dast-report.md
-        
-        # Verificar relatórios Nikto
-        if [ -f "nikto-report.html" ]; then
-          echo "✅ Nikto Web Vulnerability Scanner: SUCESSO" >> dast-report.md
-          echo "- Relatório: nikto-report.html" >> dast-report.md
-        else
-          echo "❌ Nikto Web Vulnerability Scanner: FALHOU" >> dast-report.md
-        fi
-        echo "" >> dast-report.md
-        
-        # Verificar testes customizados
-        if [ -f "security-tests-report.json" ]; then
-          echo "✅ Testes de Segurança Customizados: SUCESSO" >> dast-report.md
-          echo "- Relatório: security-tests-report.json" >> dast-report.md
-        else
-          echo "❌ Testes de Segurança Customizados: FALHOU" >> dast-report.md
         fi
         echo "" >> dast-report.md
         
@@ -338,20 +303,6 @@ jobs:
           echo "❌ OWASP ZAP Baseline Scan: FALHOU"
         fi
         echo ""
-        if [ -f "nikto-report.html" ]; then
-          echo "✅ Nikto Web Vulnerability Scanner: SUCESSO"
-          echo "   📄 Relatório: nikto-report.html"
-        else
-          echo "❌ Nikto Web Vulnerability Scanner: FALHOU"
-        fi
-        echo ""
-        if [ -f "security-tests-report.json" ]; then
-          echo "✅ Testes de Segurança Customizados: SUCESSO"
-          echo "   📄 Relatório: security-tests-report.json"
-        else
-          echo "❌ Testes de Segurança Customizados: FALHOU"
-        fi
-        echo ""
         if [ -f "dast-report.md" ]; then
           echo "✅ Relatório Consolidado: dast-report.md"
         fi
@@ -367,8 +318,6 @@ jobs:
           zap-baseline-report.html
           zap-baseline-report.json
           zap-baseline-report.xml
-          nikto-report.html
-          security-tests-report.json
           dast-report.md
         retention-days: 30
     

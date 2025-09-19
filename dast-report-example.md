@@ -8,11 +8,12 @@ Data: 2025-01-15 14:30:00
 - Relatório JSON: zap-baseline-report.json
 - Relatório XML: zap-baseline-report.xml
 
-✅ Nikto Web Vulnerability Scanner: SUCESSO
-- Relatório: nikto-report.html
+## Configuração da Aplicação
 
-✅ Testes de Segurança Customizados: SUCESSO
-- Relatório: security-tests-report.json
+- **Porta**: 8080 (ambiente de teste)
+- **Perfil**: test
+- **Banco**: H2 em memória
+- **SSL**: Desabilitado para testes
 
 ## Vulnerabilidades Identificadas
 
@@ -60,76 +61,6 @@ Data: 2025-01-15 14:30:00
    - **Impacto**: Possível interceptação de cookies
    - **Recomendação**: Adicionar flag Secure aos cookies
 
-4. **Missing HttpOnly Flag on Cookie**
-   - **Severidade**: Baixa
-   - **Descrição**: Cookies sem flag HttpOnly
-   - **Impacto**: Possível acesso via JavaScript
-   - **Recomendação**: Adicionar flag HttpOnly aos cookies
-
-5. **Server Leaks Information via "X-Powered-By" HTTP Response Header**
-   - **Severidade**: Baixa
-   - **Descrição**: Header X-Powered-By expõe tecnologia
-   - **Impacto**: Informação desnecessária sobre a aplicação
-   - **Recomendação**: Remover header X-Powered-By
-
-### Nikto - Vulnerabilidades Encontradas
-
-1. **OSVDB-3092: /admin/: This might be interesting...**
-   - **Severidade**: Informativa
-   - **Descrição**: Diretório /admin/ acessível
-   - **Recomendação**: Verificar se é necessário e proteger adequadamente
-
-2. **OSVDB-3233: /icons/README: Apache default file found.**
-   - **Severidade**: Informativa
-   - **Descrição**: Arquivo README padrão do Apache encontrado
-   - **Recomendação**: Remover arquivos padrão desnecessários
-
-### Testes Customizados - Resultados
-
-#### Testes de Autenticação
-- ✅ **Bypass de Autenticação**: Nenhuma vulnerabilidade detectada
-- ✅ **Rate Limiting**: Funcionando corretamente
-- ✅ **Headers de Segurança**: Maioria implementados
-
-#### Testes de Injeção
-- ✅ **SQL Injection**: Nenhuma vulnerabilidade detectada
-- ✅ **XSS**: Nenhuma vulnerabilidade detectada
-- ✅ **Directory Traversal**: Nenhuma vulnerabilidade detectada
-
-#### Testes de Configuração
-- ⚠️ **Headers de Segurança**: Alguns headers ausentes
-- ✅ **Exposição de Dados**: Nenhum dado sensível exposto
-- ✅ **Configuração SSL**: Configurada corretamente
-
-## Payloads Utilizados
-
-### SQL Injection
-```
-' OR '1'='1
-'; DROP TABLE users; --
-' UNION SELECT * FROM users --
-1' OR 1=1 --
-admin'--
-' OR 1=1 LIMIT 1 --
-```
-
-### XSS
-```
-<script>alert('XSS')</script>
-javascript:alert('XSS')
-<img src=x onerror=alert('XSS')>
-<svg onload=alert('XSS')>
-';alert('XSS');//
-```
-
-### Directory Traversal
-```
-../../../etc/passwd
-..\\..\\..\\windows\\system32\\drivers\\etc\\hosts
-....//....//....//etc/passwd
-%2e%2e%2f%2e%2e%2f%2e%2e%2fetc%2fpasswd
-```
-
 ## Recomendações de Mitigação
 
 ### Prioridade Alta
@@ -154,32 +85,6 @@ javascript:alert('XSS')
    - Remover headers informativos
    - Configurar logging apropriado
 
-### Prioridade Baixa
-1. **Melhorar Configuração de Servidor**:
-   - Remover headers X-Powered-By
-   - Configurar Content-Type apropriado
-   - Limpar arquivos padrão desnecessários
-
-2. **Implementar Monitoramento**:
-   - Configurar alertas de segurança
-   - Implementar logging de tentativas de ataque
-   - Monitorar padrões suspeitos
-
-## Próximos Passos
-
-1. **Correção Imediata** (1-2 dias):
-   - Implementar headers de segurança críticos
-   - Corrigir vulnerabilidades de autorização
-
-2. **Correção de Curto Prazo** (1 semana):
-   - Configurar cookies seguros
-   - Remover informações de debug
-
-3. **Melhorias de Longo Prazo** (1 mês):
-   - Implementar monitoramento avançado
-   - Configurar alertas automatizados
-   - Realizar testes de penetração manuais
-
 ## Conclusão
 
 A aplicação XP demonstra uma boa postura de segurança geral, com a maioria das vulnerabilidades sendo de baixa severidade. As principais áreas de melhoria são:
@@ -193,6 +98,6 @@ Recomenda-se executar testes DAST regularmente e implementar as correções suge
 ---
 
 **Relatório gerado automaticamente em**: 2025-01-15 14:30:00  
-**Ferramentas utilizadas**: OWASP ZAP, Nikto, Testes Customizados  
+**Ferramenta utilizada**: OWASP ZAP  
 **Ambiente de teste**: http://localhost:8080  
 **Status geral**: ✅ Aprovado com recomendações

@@ -2,17 +2,17 @@
 
 ## Resumo da Implementação
 
-Foi implementada uma solução completa de **DAST (Dynamic Application Security Testing)** para a aplicação XP, integrando múltiplas ferramentas de segurança e automatizando a execução no pipeline CI/CD.
+Foi implementada uma solução simples e focada de **DAST (Dynamic Application Security Testing)** para a aplicação XP, utilizando apenas o OWASP ZAP.
 
 ## ✅ Funcionalidades Implementadas
 
 ### 1. Pipeline CI/CD Atualizado
 - **Arquivo**: `.github/workflows/ci-cd.yml`
-- **Funcionalidade**: Integração completa de testes DAST no pipeline
+- **Funcionalidade**: Integração de testes DAST no pipeline
 - **Execução**: Automática após build da aplicação
 - **Relatórios**: Geração e upload automático de artefatos
 
-### 2. Ferramentas de Segurança Integradas
+### 2. Ferramenta de Segurança Integrada
 
 #### OWASP ZAP (Zed Attack Proxy)
 - Scanner principal de vulnerabilidades web
@@ -20,44 +20,14 @@ Foi implementada uma solução completa de **DAST (Dynamic Application Security 
 - Relatórios em HTML, JSON e XML
 - Configuração otimizada para CI/CD
 
-#### Nikto Web Vulnerability Scanner
-- Scanner especializado em vulnerabilidades web
-- Detecção de configurações inseguras
-- Identificação de arquivos sensíveis
-- Relatórios detalhados
-
-#### SQLMap
-- Scanner automatizado de SQL Injection
-- Testes de injeção SQL
-- Exploração de vulnerabilidades
-- Integração com Docker
-
-#### Wapiti
-- Scanner de vulnerabilidades web
-- Testes de XSS, SQL Injection
-- Relatórios em HTML
-- Configuração Docker
-
-#### Testes Customizados
-- **Arquivo**: `scripts/security-tests.py`
-- Testes específicos da aplicação XP
-- Validação de bypass de autenticação
-- Verificação de headers de segurança
-- Testes de rate limiting
-- Detecção de exposição de dados sensíveis
-
 ### 3. Scripts de Execução
 
 #### Windows
-- `run-dast-analysis.bat`: Execução local completa
+- `run-dast.bat`: Execução local simples
 - `run-dast-docker.bat`: Execução com Docker Compose
 
-#### Linux/macOS
-- `run-dast-analysis.sh`: Execução local completa
-
 #### Docker Compose
-- `docker-compose-dast.yml`: Configuração completa para testes DAST
-- `nginx-dast.conf`: Configuração Nginx para testes
+- `docker-compose-dast.yml`: Configuração para testes DAST
 
 ### 4. Documentação Completa
 
@@ -74,47 +44,34 @@ Foi implementada uma solução completa de **DAST (Dynamic Application Security 
 
 ## 🔍 Tipos de Vulnerabilidades Detectadas
 
-### 1. Vulnerabilidades de Autenticação
-- Bypass de autenticação
-- Força bruta
-- Configurações inseguras de login
-
-### 2. Vulnerabilidades de Injeção
+### 1. Vulnerabilidades de Injeção
 - SQL Injection
 - Cross-Site Scripting (XSS)
 - Command Injection
-- Directory Traversal
 
-### 3. Vulnerabilidades de Configuração
+### 2. Vulnerabilidades de Configuração
 - Headers de segurança ausentes
 - Cookies inseguros
 - Exposição de informações sensíveis
-- Configurações de servidor inadequadas
 
-### 4. Vulnerabilidades de Autorização
+### 3. Vulnerabilidades de Autorização
 - Controle de acesso inadequado
 - Referências diretas a objetos
-- Escalação de privilégios
 
 ## 📊 Relatórios Gerados
 
 ### 1. Relatórios Individuais
 - **OWASP ZAP**: HTML, JSON, XML
-- **Nikto**: HTML
-- **SQLMap**: Múltiplos formatos
-- **Wapiti**: HTML
-- **Testes Customizados**: JSON
 
 ### 2. Relatório Consolidado
 - **Formato**: Markdown
-- **Conteúdo**: Resumo de todas as ferramentas
+- **Conteúdo**: Resumo dos testes
 - **Classificação**: Por severidade (Alta, Média, Baixa, Informativa)
 - **Recomendações**: Sugestões de mitigação
 
 ### 3. Análise de Vulnerabilidades
 - Contagem por severidade
 - Detalhes de cada vulnerabilidade
-- Payloads utilizados
 - Recomendações específicas
 
 ## 🚀 Como Executar
@@ -122,10 +79,7 @@ Foi implementada uma solução completa de **DAST (Dynamic Application Security 
 ### 1. Execução Local (Recomendado para Desenvolvimento)
 ```bash
 # Windows
-run-dast-analysis.bat
-
-# Linux/macOS
-./run-dast-analysis.sh
+run-dast.bat
 ```
 
 ### 2. Execução com Docker Compose
@@ -187,15 +141,10 @@ docker-compose -f docker-compose-dast.yml up -d
 
 - ✅ Pipeline CI/CD atualizado com DAST
 - ✅ OWASP ZAP integrado e configurado
-- ✅ Nikto integrado e configurado
-- ✅ SQLMap integrado e configurado
-- ✅ Wapiti integrado e configurado
-- ✅ Testes customizados implementados
 - ✅ Scripts de execução local criados
 - ✅ Configuração Docker Compose
 - ✅ Documentação completa
 - ✅ Exemplos de relatórios
-- ✅ Configuração Nginx para testes
 - ✅ Integração com pipeline existente
 
 ## 🎯 Próximos Passos Recomendados

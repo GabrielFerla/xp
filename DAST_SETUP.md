@@ -6,32 +6,12 @@ Este documento descreve como configurar e executar testes dinâmicos de seguran�
 
 Os testes DAST (Dynamic Application Security Testing) são executados contra a aplicação em tempo de execução para identificar vulnerabilidades de segurança que só podem ser detectadas quando a aplicação está funcionando.
 
-## Ferramentas Implementadas
+## Ferramenta Implementada
 
-### 1. OWASP ZAP (Zed Attack Proxy)
+### OWASP ZAP (Zed Attack Proxy)
 - **Função**: Scanner principal de vulnerabilidades web
 - **Capacidades**: Detecção de OWASP Top 10, XSS, SQL Injection, CSRF
 - **Relatórios**: HTML, JSON, XML
-
-### 2. Nikto Web Vulnerability Scanner
-- **Função**: Scanner especializado em vulnerabilidades web
-- **Capacidades**: Detecção de configurações inseguras, arquivos sensíveis
-- **Relatórios**: HTML
-
-### 3. SQLMap
-- **Função**: Scanner automatizado de SQL Injection
-- **Capacidades**: Testes de injeção SQL, exploração de vulnerabilidades
-- **Relatórios**: Múltiplos formatos
-
-### 4. Wapiti
-- **Função**: Scanner de vulnerabilidades web
-- **Capacidades**: XSS, SQL Injection, File Disclosure
-- **Relatórios**: HTML
-
-### 5. Testes Customizados
-- **Função**: Testes específicos da aplicação XP
-- **Capacidades**: Bypass de autenticação, headers de segurança, rate limiting
-- **Relatórios**: JSON
 
 ## Pré-requisitos
 
@@ -52,36 +32,17 @@ Os testes DAST (Dynamic Application Security Testing) são executados contra a a
 
 ```bash
 # Execução simples
-run-dast-analysis.bat
+run-dast.bat
+```
 
+### 2. Execução com Docker Compose
+
+```bash
 # Execução com Docker Compose
 run-dast-docker.bat
 ```
 
-### 2. Execução Local (Linux/macOS)
-
-```bash
-# Dar permissão de execução
-chmod +x run-dast-analysis.sh
-
-# Executar
-./run-dast-analysis.sh
-```
-
-### 3. Execução com Docker Compose
-
-```bash
-# Iniciar todos os serviços
-docker-compose -f docker-compose-dast.yml up -d
-
-# Executar varreduras
-docker-compose -f docker-compose-dast.yml exec zap zap-baseline.py -t http://xp-app:8080 -r /zap/wrk/report.html
-
-# Parar serviços
-docker-compose -f docker-compose-dast.yml down
-```
-
-### 4. Execução Manual de Ferramentas
+### 3. Execução Manual
 
 #### OWASP ZAP
 ```bash
@@ -94,24 +55,6 @@ docker run -t zaproxy/zap-stable zap-baseline.py \
   -J report.json \
   -x report.xml \
   -r report.html
-```
-
-#### Nikto
-```bash
-# Execução básica
-docker run --rm sullo/nikto -h http://localhost:8080
-
-# Execução com relatório
-docker run --rm -v $(pwd):/tmp/reports \
-  sullo/nikto -h http://localhost:8080 \
-  -output /tmp/reports/nikto-report.html \
-  -Format htm
-```
-
-#### Testes Customizados
-```bash
-# Executar testes Python
-python3 scripts/security-tests.py http://localhost:8080
 ```
 
 ## Configuração
@@ -151,20 +94,8 @@ O pipeline CI/CD está configurado em `.github/workflows/ci-cd.yml`:
    - `zap-baseline-report.json` - Dados estruturados
    - `zap-baseline-report.xml` - Formato XML
 
-2. **Nikto**:
-   - `nikto-report.html` - Relatório de vulnerabilidades
-
-3. **SQLMap**:
-   - Relatórios em múltiplos formatos na pasta `sqlmap-reports/`
-
-4. **Wapiti**:
-   - `wapiti-report.html` - Relatório de vulnerabilidades
-
-5. **Testes Customizados**:
-   - `security-tests-report.json` - Resultados estruturados
-
-6. **Relatório Consolidado**:
-   - `dast-report.md` - Resumo de todos os testes
+2. **Relatório Consolidado**:
+   - `dast-report.md` - Resumo dos testes
 
 ### Interpretação dos Relatórios
 
