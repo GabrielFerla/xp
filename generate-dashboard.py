@@ -37,16 +37,23 @@ def extract_vulnerabilities_from_json(json_file):
 def extract_vulnerabilities_from_xml(xml_file):
     """Extrai estatísticas de vulnerabilidades de um arquivo XML (SpotBugs)"""
     try:
-        with open(xml_file, 'r', encoding='utf-8') as f:
-            content = f.read()
+        import xml.dom.minidom
+        doc = xml.dom.minidom.parse(xml_file)
+        bug_instances = doc.getElementsByTagName('BugInstance')
         
-        # Contar BugInstance por prioridade
-        high = len(re.findall(r'<BugInstance[^>]*priority="1"', content))
-        medium = len(re.findall(r'<BugInstance[^>]*priority="2"', content))
-        low = len(re.findall(r'<BugInstance[^>]*priority="3"', content))
+        high = medium = low = 0
+        for bug in bug_instances:
+            priority = bug.getAttribute('priority')
+            if priority == '1':
+                high += 1
+            elif priority == '2':
+                medium += 1
+            elif priority == '3':
+                low += 1
         
         return high, medium, low
-    except:
+    except Exception as e:
+        print(f"Erro ao processar XML: {e}")
         return 0, 0, 0
 
 def get_file_status(file_path):
