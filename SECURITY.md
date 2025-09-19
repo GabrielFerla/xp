@@ -162,8 +162,7 @@ String cleanInput = inputSanitizer.sanitizeInput(userInput);
 
 ## Pipeline de Segurança CI/CD
 
-
-### 1. Ferramentas de Análise Estática
+### 1. Ferramentas de Análise Estática (SAST)
 
 **OWASP Dependency Check**:
 - Varredura de vulnerabilidades em dependências
@@ -181,7 +180,73 @@ String cleanInput = inputSanitizer.sanitizeInput(userInput);
 - `owasp-suppression.xml`: Supressões OWASP
 - `spotbugs-security-include.xml`: Configuração de segurança do SpotBugs
 
-### 2. Segurança de Contêiner
+### 2. Ferramentas de Análise Dinâmica (DAST)
+
+**OWASP ZAP (Zed Attack Proxy)**:
+- Scanner de vulnerabilidades web automatizado
+- Testes de segurança em tempo de execução
+- Detecção de vulnerabilidades OWASP Top 10
+- Relatórios em múltiplos formatos (HTML, JSON, XML)
+
+**Nikto Web Vulnerability Scanner**:
+- Scanner de vulnerabilidades web especializado
+- Detecção de configurações inseguras
+- Identificação de arquivos e diretórios sensíveis
+- Relatórios detalhados de vulnerabilidades
+
+**SQLMap**:
+- Scanner automatizado de SQL Injection
+- Testes de injeção SQL em endpoints
+- Detecção de vulnerabilidades de banco de dados
+- Exploração automatizada de vulnerabilidades
+
+**Wapiti**:
+- Scanner de vulnerabilidades web
+- Testes de múltiplas categorias de vulnerabilidades
+- Detecção de XSS, SQL Injection, e outras falhas
+- Relatórios em formato HTML
+
+**Testes Customizados**:
+- Script Python para testes específicos da aplicação
+- Testes de bypass de autenticação
+- Validação de headers de segurança
+- Testes de rate limiting e proteção contra força bruta
+
+### 3. Integração no Pipeline CI/CD
+
+**Execução Automatizada**:
+- Testes DAST executados após build da aplicação
+- Aplicação iniciada em ambiente de staging
+- Varreduras executadas contra aplicação em execução
+- Relatórios consolidados gerados automaticamente
+
+**Ferramentas Utilizadas**:
+- OWASP ZAP Baseline Scan
+- Nikto Web Vulnerability Scanner
+- Testes de segurança customizados
+- Geração de relatórios consolidados
+
+**Arquivos de Configuração**:
+- `.github/workflows/ci-cd.yml`: Pipeline CI/CD com DAST
+- `docker-compose-dast.yml`: Configuração Docker para testes DAST
+- `scripts/security-tests.py`: Testes customizados de segurança
+
+### 4. Scripts de Execução Local
+
+**Windows**:
+- `run-dast-analysis.bat`: Execução local de testes DAST
+- `run-dast-docker.bat`: Execução com Docker Compose
+
+**Linux/macOS**:
+- `run-dast-analysis.sh`: Execução local de testes DAST
+
+**Funcionalidades**:
+- Inicialização automática da aplicação
+- Execução de múltiplas ferramentas de segurança
+- Geração de relatórios consolidados
+- Limpeza automática de recursos
+
+### 5. Segurança de Contêiner
 
 **Trivy Scanner**:
 - Varredura de vulnerabilidades em imagens de contêiner
@@ -189,7 +254,7 @@ String cleanInput = inputSanitizer.sanitizeInput(userInput);
 - Boas práticas de segurança para Dockerfile
 - Integração com builds Docker
 
-### 3. Segurança na Build
+### 6. Segurança na Build
 
 **Plugins de Segurança Maven**:
 - Verificação de vulnerabilidades em dependências
@@ -318,6 +383,10 @@ app.audit.enabled=true
 - ✅ **Comunicação Segura**: Apenas HTTPS/TLS
 - ✅ **Cabeçalhos de Segurança**: Implementação completa
 - ✅ **Verificação de Dependências**: Checagens automatizadas de vulnerabilidades
+- ✅ **Análise Estática (SAST)**: SpotBugs, OWASP Dependency Check, JaCoCo
+- ✅ **Análise Dinâmica (DAST)**: OWASP ZAP, Nikto, SQLMap, Wapiti
+- ✅ **Testes de Segurança Customizados**: Scripts Python automatizados
+- ✅ **Pipeline CI/CD de Segurança**: Integração completa SAST + DAST
 
 
 

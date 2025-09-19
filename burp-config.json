@@ -1,0 +1,52 @@
+{
+  "target": {
+    "url": "http://localhost:8082",
+    "scope": {
+      "include": [
+        "http://localhost:8082/*"
+      ],
+      "exclude": [
+        "http://localhost:8082/actuator/*",
+        "http://localhost:8082/swagger-ui/*",
+        "http://localhost:8082/v3/api-docs/*"
+      ]
+    }
+  },
+  "scan": {
+    "scan_type": "crawl_and_audit",
+    "crawl": {
+      "max_depth": 10,
+      "max_links": 1000,
+      "respect_robots_txt": false,
+      "follow_redirects": true
+    },
+    "audit": {
+      "audit_type": "full",
+      "include_passive_checks": true,
+      "include_active_checks": true,
+      "max_audit_time": 3600
+    }
+  },
+  "authentication": {
+    "type": "none"
+  },
+  "reporting": {
+    "format": "html",
+    "include_request_response": true,
+    "include_evidence": true,
+    "severity_filter": "all"
+  },
+  "performance": {
+    "max_concurrent_requests": 10,
+    "request_delay": 100,
+    "timeout": 30000
+  },
+  "advanced": {
+    "user_agent": "Burp Suite Professional DAST Scanner",
+    "follow_redirects": true,
+    "verify_ssl": false,
+    "proxy_settings": {
+      "enabled": false
+    }
+  }
+}
