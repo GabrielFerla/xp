@@ -251,6 +251,12 @@
 					<!-- Configurações de saída -->
 					<outputDirectory>${project.build.directory}/sca-reports</outputDirectory>
 					
+					<!-- Forçar geração de todos os formatos -->
+					<reportFormat>HTML</reportFormat>
+					<reportFormat>XML</reportFormat>
+					<reportFormat>JSON</reportFormat>
+					<reportFormat>CSV</reportFormat>
+					
 					<!-- Configurações para lidar com problemas de conectividade -->
 					<failOnError>false</failOnError>
 					<autoUpdate>true</autoUpdate>

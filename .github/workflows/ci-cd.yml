@@ -272,6 +272,26 @@ jobs:
           sca-report.md
         retention-days: 30
     
+    - name: Generate Security Dashboard
+      run: |
+        echo "📊 Gerando dashboard de segurança..."
+        
+        # Verificar se Python está disponível
+        python3 --version || python --version
+        
+        # Executar script de geração do dashboard
+        python3 generate-dashboard.py || python generate-dashboard.py
+        
+        echo "✅ Dashboard de segurança gerado!"
+        echo "📄 Arquivo: security-dashboard.html"
+    
+    - name: Upload Security Dashboard
+      uses: actions/upload-artifact@v4
+      with:
+        name: security-dashboard
+        path: security-dashboard.html
+        retention-days: 30
+    
     - name: Generate SAST Report
       run: |
         echo "# Relatório de Análise Estática de Segurança (SAST)" > sast-report.md
