@@ -226,11 +226,45 @@ jobs:
     - name: Start application for DAST testing
       run: |
         echo "Iniciando aplicação para testes DAST..."
-        mvn spring-boot:run -Dspring-boot.run.profiles=test &
+        echo "Configuração:"
+        echo "- Perfil: test"
+        echo "- Porta: 8080 (forçada)"
+        echo "- Banco: H2 em memória"
+        
+        # Primeiro, tentar com Maven
+        echo "Tentativa 1: Iniciando com Maven..."
+        mvn spring-boot:run -Dspring-boot.run.profiles=test -Dserver.port=8080 > app.log 2>&1 &
+        APP_PID=$!
+        echo "PID da aplicação: $APP_PID"
         echo "Aguardando aplicação inicializar (pode levar até 3 minutos)..."
         sleep 120
         echo "Aplicação iniciada, aguardando estabilização..."
         sleep 60
+        echo "Verificando se processo ainda está rodando..."
+        ps aux | grep java || echo "Processo Java não encontrado"
+        echo "Últimas linhas do log da aplicação:"
+        tail -20 app.log || echo "Log não encontrado"
+        
+        # Verificar se a aplicação está respondendo
+        if ! curl -f http://localhost:8080/actuator/health >/dev/null 2>&1; then
+          echo "Maven falhou, tentando com Docker..."
+          # Parar processo Maven se ainda estiver rodando
+          pkill -f "spring-boot:run" || true
+          # Tentar com Docker
+          docker build -t xp-app-test .
+          docker run -d --name xp-app-dast -p 8080:8080 -e SPRING_PROFILES_ACTIVE=test -e SERVER_PORT=8080 xp-app-test
+          echo "Aguardando Docker inicializar..."
+          sleep 60
+          # Verificar se Docker está funcionando
+          if ! curl -f http://localhost:8080/actuator/health >/dev/null 2>&1; then
+            echo "Docker também falhou, verificando logs..."
+            docker logs xp-app-dast || echo "Logs do Docker não encontrados"
+            echo "Tentando configuração mínima..."
+            # Última tentativa com configuração mínima
+            mvn spring-boot:run -Dspring-boot.run.profiles=test -Dserver.port=8080 -Dspring.datasource.url=jdbc:h2:mem:testdb -Dspring.jpa.hibernate.ddl-auto=create-drop &
+            sleep 90
+          fi
+        fi
     
     - name: Wait for application to be ready
       run: |
@@ -251,7 +285,18 @@ jobs:
           ps aux | grep java || echo "Nenhum processo Java encontrado"
           echo "Verificando porta 8080..."
           netstat -tlnp | grep 8080 || echo "Porta 8080 não está em uso"
-          exit 1
+          echo "Log completo da aplicação:"
+          cat app.log || echo "Log não encontrado"
+          echo "Tentando iniciar aplicação de forma alternativa..."
+          # Tentar com configuração mais simples
+          mvn spring-boot:run -Dspring-boot.run.profiles=test -Dserver.port=8080 -Dspring.datasource.url=jdbc:h2:mem:testdb &
+          sleep 60
+          if curl -f http://localhost:8080/actuator/health >/dev/null 2>&1; then
+            echo "✅ Aplicação iniciada com configuração alternativa"
+          else
+            echo "❌ Falha definitiva na inicialização da aplicação"
+            exit 1
+          fi
         fi
     
     - name: Verify application is running
@@ -370,6 +415,8 @@ jobs:
       run: |
         echo "Parando aplicação..."
         pkill -f "spring-boot:run" || true
+        docker stop xp-app-dast || true
+        docker rm xp-app-dast || true
 
   deploy:
     needs: [build, dast]
