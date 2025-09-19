@@ -271,6 +271,8 @@ jobs:
         # No Ubuntu/GitHub Actions, usar --network host para acessar localhost
         # Remover arquivo zap.yaml se existir para evitar conflitos de configuração
         rm -f zap.yaml
+        # Usar configuração específica para CI/CD
+        cp zap-cicd.yaml zap.yaml
         # Criar diretório de trabalho com permissões corretas
         mkdir -p zap-reports
         chmod 755 zap-reports
@@ -284,6 +286,8 @@ jobs:
         # Verificar se os relatórios foram gerados
         echo "Verificando relatórios gerados..."
         ls -la zap-baseline-report.* || echo "Nenhum relatório encontrado"
+        # Limpar arquivo temporário
+        rm -f zap.yaml
     
     - name: Generate DAST Report
       run: |
