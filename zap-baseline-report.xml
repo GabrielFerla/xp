@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<OWASPZAPReport programName="ZAP" version="2.16.1" generated="Fri, 19 Sept 2025 12:48:26" created="2025-09-19T12:48:26.688741285Z">
+<OWASPZAPReport programName="ZAP" version="2.16.1" generated="Fri, 19 Sept 2025 12:51:34" created="2025-09-19T12:51:34.260845434Z">
 	
 		<site name="http://host.docker.internal:8080" host="host.docker.internal" port="8080" ssl="false">
 			<alerts>
@@ -17,7 +17,7 @@
 						<instances>
 							
 								<instance>
-									<uri>http://host.docker.internal:8080/robots.txt</uri>
+									<uri>http://host.docker.internal:8080</uri>
 									<method>GET</method>
 									<param></param>
 									<attack></attack>
@@ -27,7 +27,7 @@
 							
 							
 								<instance>
-									<uri>http://host.docker.internal:8080/sitemap.xml</uri>
+									<uri>http://host.docker.internal:8080/robots.txt</uri>
 									<method>GET</method>
 									<param></param>
 									<attack></attack>
@@ -42,7 +42,7 @@
 						<reference>&lt;p&gt;https://datatracker.ietf.org/doc/html/rfc7234&lt;/p&gt;&lt;p&gt;https://datatracker.ietf.org/doc/html/rfc7231&lt;/p&gt;&lt;p&gt;https://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html&lt;/p&gt;</reference>
 						<cweid>524</cweid>
 						<wascid>13</wascid>
-						<sourceid>8</sourceid>
+						<sourceid>7</sourceid>
 					</alertitem>
 				
 			</alerts>

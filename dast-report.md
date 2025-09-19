@@ -1,5 +1,5 @@
 # Relatório de Testes Dinâmicos de Segurança (DAST) 
-Data: 19/09/2025  9:48:32,95 
+Data: 19/09/2025  9:51:40,20 
  
 ## Resumo dos Testes DAST 
  

@@ -216,30 +216,61 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
     
+    - name: Verify Docker is available
+      run: |
+        echo "Verificando Docker..."
+        docker --version
+        docker info
+        echo "✅ Docker está funcionando!"
+    
     - name: Start application for DAST testing
       run: |
         echo "Iniciando aplicação para testes DAST..."
         mvn spring-boot:run -Dspring-boot.run.profiles=test &
-        sleep 60
+        echo "Aguardando aplicação inicializar (pode levar até 3 minutos)..."
+        sleep 120
         echo "Aplicação iniciada, aguardando estabilização..."
-        sleep 30
+        sleep 60
     
     - name: Wait for application to be ready
       run: |
-        for i in {1..30}; do
-          if curl -f http://localhost:8080/actuator/health; then
-            echo "Aplicação está pronta para testes DAST"
+        echo "Verificando se aplicação está respondendo..."
+        for i in {1..20}; do
+          if curl -f http://localhost:8080/actuator/health >/dev/null 2>&1; then
+            echo "✅ Aplicação está pronta para testes DAST"
             break
           fi
-          echo "Aguardando aplicação... tentativa $i/30"
-          sleep 10
+          echo "Aguardando aplicação... tentativa $i/20"
+          sleep 15
         done
+        
+        # Verificação final
+        if ! curl -f http://localhost:8080/actuator/health >/dev/null 2>&1; then
+          echo "❌ ERRO: Aplicação não está respondendo após 5 minutos"
+          echo "Verificando processos Java..."
+          ps aux | grep java || echo "Nenhum processo Java encontrado"
+          echo "Verificando porta 8080..."
+          netstat -tlnp | grep 8080 || echo "Porta 8080 não está em uso"
+          exit 1
+        fi
+    
+    - name: Verify application is running
+      run: |
+        echo "Verificação final da aplicação..."
+        curl -v http://localhost:8080/actuator/health
+        echo "Aplicação confirmada como funcionando!"
+        
+        # Verificar se a aplicação está acessível via Docker
+        echo "Testando conectividade para o ZAP..."
+        docker run --rm --network host curlimages/curl:latest curl -f http://localhost:8080/actuator/health
+        echo "✅ Aplicação acessível via Docker - ZAP pode executar!"
     
     - name: Run OWASP ZAP Baseline Scan
       run: |
         echo "Executando OWASP ZAP Baseline Scan..."
-        docker run -t --rm -v $(pwd):/zap/wrk/:rw zaproxy/zap-stable zap-baseline.py \
-          -t http://host.docker.internal:8080 \
+        # No Ubuntu/GitHub Actions, usar --network host para acessar localhost
+        docker run -t --rm --network host -v $(pwd):/zap/wrk/:rw zaproxy/zap-stable zap-baseline.py \
+          -t http://localhost:8080 \
           -J zap-baseline-report.json \
           -x zap-baseline-report.xml \
           -r zap-baseline-report.html \
