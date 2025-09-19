@@ -219,7 +219,7 @@
 			<plugin>
 				<groupId>org.owasp</groupId>
 				<artifactId>dependency-check-maven</artifactId>
-				<version>8.4.0</version>
+				<version>12.1.0</version>
 				<configuration>
 					<!-- Configurações de severidade - falhar apenas em vulnerabilidades críticas -->
 					<failBuildOnCVSS>7</failBuildOnCVSS>
@@ -238,7 +238,6 @@
 					<cveValidForHours>24</cveValidForHours>
 					
 					<!-- Configurações da API NVD -->
-					<nvdApiKey></nvdApiKey>
 					<nvdApiDelay>2000</nvdApiDelay>
 					
 					<!-- Análise de dependências transitivas -->
