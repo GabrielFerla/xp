@@ -234,7 +234,7 @@ String cleanInput = inputSanitizer.sanitizeInput(userInput);
 ### 4. Scripts de Execução Local
 
 **Windows**:
-- `run-dast-analysis.bat`: Execução local de testes DAST
+- `run-dast.bat`: Execução local de testes DAST
 - `run-dast-docker.bat`: Execução com Docker Compose
 
 **Linux/macOS**:

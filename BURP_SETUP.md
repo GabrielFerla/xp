@@ -35,10 +35,10 @@ O Dastardly já está configurado nos scripts fornecidos:
 
 ```bash
 # Executar teste completo com Dastardly
-run-dast-burp.bat
-
-# Ou via Docker Compose
 run-burp-docker.bat
+
+# Ou versão corrigida
+run-burp-docker-fixed.bat
 ```
 
 ### 2. Burp Suite Professional
@@ -48,7 +48,7 @@ Para usar o Burp Suite Professional:
 1. **Adquira uma licença** em [portswigger.net](https://portswigger.net/burp)
 2. **Baixe o JAR** do Burp Suite Professional
 3. **Coloque o arquivo** `burp-suite-pro.jar` na pasta do projeto
-4. **Execute o script** `run-dast-burp.bat`
+4. **Execute o script** `run-burp-docker-fixed.bat`
 
 ## 📊 Comparação de Ferramentas
 
@@ -61,7 +61,7 @@ Para usar o Burp Suite Professional:
 
 ## 🔧 Scripts Disponíveis
 
-### `run-dast-burp.bat`
+### `run-burp-docker-fixed.bat`
 Script principal que executa:
 - Dastardly (Burp Suite gratuito)
 - OWASP ZAP (complementar)
@@ -134,7 +134,7 @@ pipeline {
     stages {
         stage('DAST') {
             steps {
-                sh 'run-dast-burp.bat'
+                sh 'run-burp-docker-fixed.bat'
             }
         }
     }
