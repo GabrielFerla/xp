@@ -98,7 +98,7 @@ echo.
 echo Agora você pode executar os scripts de DAST com segurança!
 echo.
 echo Scripts recomendados:
-echo - run-dast-burp.bat (execução local)
+echo - run-dast.bat (execução local)
 echo - run-burp-docker-fixed.bat (Docker corrigido)
 echo.
 pause
