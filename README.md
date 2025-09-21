@@ -508,9 +508,3 @@ Todos os requisitos da sprint foram atendidos com sucesso:
 
 O projeto demonstra uma implementação robusta e profissional de segurança em aplicações Java, com automação completa e monitoramento em tempo real.
 
----
-
-**Desenvolvido por**: [Seu Nome]  
-**Data**: 19/09/2025  
-**Versão**: 1.0  
-**Status**: ✅ Implementação Completa

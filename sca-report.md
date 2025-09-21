@@ -1,5 +1,4 @@
 # Relatório de Análise de Composição de Software (SCA)
-Data: 19/09/2025 11:09:00
 Ferramenta: OWASP Dependency Check v8.4.0
 
 ## Resumo da Análise

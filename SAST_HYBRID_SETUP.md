@@ -110,23 +110,3 @@ mvn org.owasp:dependency-check-maven:check
 4. **Relatórios**: Múltiplos formatos (XML, HTML, Markdown)
 5. **Padrões**: Suporte a OWASP, CWE, SANS Top 25
 
-### ✅ Comparação com Soluções Anteriores
-- **SonarQube**: Problemas de configuração resolvidos
-- **SpotBugs**: Configurado para não falhar o build
-- **OWASP**: Resiliente a problemas de conectividade
-- **Integração**: Melhor integração com pipeline CI/CD
-
-## Próximos Passos
-
-1. **Executar pipeline** para primeira análise
-2. **Revisar relatórios** gerados
-3. **Corrigir bugs** identificados pelo SpotBugs
-4. **Atualizar dependências** com vulnerabilidades
-5. **Melhorar cobertura** de testes
-
-## Suporte
-
-- **SpotBugs**: [https://spotbugs.github.io](https://spotbugs.github.io)
-- **OWASP**: [https://owasp.org/www-project-dependency-check](https://owasp.org/www-project-dependency-check)
-- **JaCoCo**: [https://www.jacoco.org](https://www.jacoco.org)
-- **Issues**: Reportar problemas no repositório do projeto

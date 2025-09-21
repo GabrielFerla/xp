@@ -235,32 +235,3 @@ mvn org.owasp:dependency-check-maven:check
 # Verificar versão
 mvn org.owasp:dependency-check-maven:help
 ```
-
-## 🎯 Próximos Passos
-
-### Melhorias Futuras
-1. **Integração com Snyk**: Como ferramenta complementar
-2. **Alertas por Email**: Notificações automáticas
-3. **Dashboard Web**: Interface visual para relatórios
-4. **Política de Licenças**: Configuração de licenças permitidas/proibidas
-5. **Análise de Dependências Transitivas**: Análise mais profunda
-
-### Monitoramento Contínuo
-- Executar análise a cada build
-- Revisar relatórios semanalmente
-- Atualizar dependências mensalmente
-- Revisar política de licenças trimestralmente
-
----
-
-## 📞 Suporte
-
-Para dúvidas ou problemas com a implementação SCA:
-1. Verificar logs de execução
-2. Consultar documentação OWASP
-3. Revisar configurações no `dependency-check.properties`
-4. Verificar supressões no `owasp-suppression.xml`
-
-**Status**: ✅ Implementação SCA Concluída
-**Versão**: 1.0
-**Data**: $(date)
